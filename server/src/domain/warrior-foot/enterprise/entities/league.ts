@@ -1,6 +1,6 @@
-import { Entity } from "#core/entities/entity.ts"
-import type { UniqueEntityId } from "#core/entities/unique-entity-id.ts"
-import type { Optional } from "#core/types/optional.ts"
+import { Entity } from '#core/entities/entity.ts'
+import type { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
+import type { Optional } from '#core/types/optional.ts'
 
 export interface LeagueProps {
   name: string
@@ -21,15 +21,15 @@ export class League extends Entity<LeagueProps> {
     return league
   }
 
-  get name () {
+  get name() {
     return this.props.name
   }
 
-  get code () {
+  get code() {
     return this.props.code
   }
 
-  get userId () {
+  get userId() {
     return this.props.userId
   }
 }

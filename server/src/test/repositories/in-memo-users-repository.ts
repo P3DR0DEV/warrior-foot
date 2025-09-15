@@ -1,5 +1,5 @@
-import type { UsersRepository } from "#domain/warrior-foot/application/repositories/users-repository.ts";
-import type { User } from "#domain/warrior-foot/enterprise/entities/user.ts";
+import type { UsersRepository } from '#domain/warrior-foot/application/repositories/users-repository.ts'
+import type { User } from '#domain/warrior-foot/enterprise/entities/user.ts'
 
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = []
@@ -10,7 +10,7 @@ export class InMemoryUsersRepository implements UsersRepository {
     if (!user) {
       return null
     }
-    
+
     return user
   }
 

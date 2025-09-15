@@ -12,7 +12,6 @@ describe('Create User Use Case', () => {
   })
 
   it('should return a success response', async () => {
-
     const response = await sut.execute({
       name: 'Pedro Mendes',
       email: 'pedro@mendes.com',

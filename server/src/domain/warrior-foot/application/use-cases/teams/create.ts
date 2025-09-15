@@ -21,7 +21,7 @@ export class CreateTeamUseCase {
   constructor(
     private readonly repository: TeamsRepository,
     private readonly leaguesRepository: LeaguesRepository,
-  ) { }
+  ) {}
 
   async execute({
     name,

@@ -1,8 +1,8 @@
-import { Entity } from "#core/entities/entity.ts"
-import type { UniqueEntityId } from "#core/entities/unique-entity-id.ts"
-import type { Optional } from "#core/types/optional.ts"
+import { Entity } from '#core/entities/entity.ts'
+import type { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
+import type { Optional } from '#core/types/optional.ts'
 
-type LeagueUsersRole = 'owner' | 'guest' 
+type LeagueUsersRole = 'owner' | 'guest'
 
 export interface LeagueUserProps {
   leagueId: UniqueEntityId
@@ -23,15 +23,15 @@ export class LeagueUsers extends Entity<LeagueUserProps> {
     return leagueUser
   }
 
-  get leagueId () {
+  get leagueId() {
     return this.props.leagueId
   }
 
-  get userId () {
+  get userId() {
     return this.props.userId
   }
 
-  get role () {
+  get role() {
     return this.props.role
   }
 }

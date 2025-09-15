@@ -1,5 +1,5 @@
-import type { TeamsRepository } from "#domain/warrior-foot/application/repositories/teams-repository.ts";
-import type { Team } from "#domain/warrior-foot/enterprise/entities/team.ts";
+import type { TeamsRepository } from '#domain/warrior-foot/application/repositories/teams-repository.ts'
+import type { Team } from '#domain/warrior-foot/enterprise/entities/team.ts'
 
 export class InMemoryTeamsRepository implements TeamsRepository {
   public items: Team[] = []

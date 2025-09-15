@@ -1,6 +1,6 @@
-import { Entity } from "#core/entities/entity.ts"
-import type { UniqueEntityId } from "#core/entities/unique-entity-id.ts"
-import type { Optional } from "#core/types/optional.ts"
+import { Entity } from '#core/entities/entity.ts'
+import type { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
+import type { Optional } from '#core/types/optional.ts'
 
 type Division = 'A' | 'B' | 'C' | 'D'
 
@@ -25,23 +25,23 @@ export class Team extends Entity<TeamProps> {
     return team
   }
 
-  get name () {
+  get name() {
     return this.props.name
   }
 
-  get primaryColor () {
+  get primaryColor() {
     return this.props.primaryColor
   }
 
-  get secondaryColor () {
+  get secondaryColor() {
     return this.props.secondaryColor
   }
 
-  get division () {
+  get division() {
     return this.props.division
   }
 
-  get leagueId () {
+  get leagueId() {
     return this.props.leagueId
   }
 }

@@ -1,4 +1,4 @@
-import {faker}  from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 import type { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
 import { User, type UserProps } from '#domain/warrior-foot/enterprise/entities/user.ts'
 

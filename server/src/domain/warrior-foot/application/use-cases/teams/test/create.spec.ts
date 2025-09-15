@@ -1,8 +1,8 @@
-import { UniqueEntityId } from "#core/entities/unique-entity-id.ts"
-import { makeLeague } from "#test/factories/make-league.ts"
-import { InMemoryLeaguesRepository } from "#test/repositories/in-memo-leagues-repository.ts"
-import { InMemoryTeamsRepository } from "#test/repositories/in-memo-teams-repository.ts"
-import { CreateTeamUseCase } from "../create"
+import { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
+import { makeLeague } from '#test/factories/make-league.ts'
+import { InMemoryLeaguesRepository } from '#test/repositories/in-memo-leagues-repository.ts'
+import { InMemoryTeamsRepository } from '#test/repositories/in-memo-teams-repository.ts'
+import { CreateTeamUseCase } from '../create'
 
 let teamsRepository: InMemoryTeamsRepository
 let leaguesRepository: InMemoryLeaguesRepository

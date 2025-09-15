@@ -1,4 +1,4 @@
-import type { Team } from "#domain/warrior-foot/enterprise/entities/team.ts"
+import type { Team } from '#domain/warrior-foot/enterprise/entities/team.ts'
 
 export interface TeamsRepository {
   findById(id: string): Promise<Team | null>
