@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "biome format --write ./src",
+    "dev": "node --env-file .env.local --watch ./src/infra/http/server.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
@@ -19,16 +20,25 @@
     "@biomejs/biome": "2.2.4",
     "@faker-js/faker": "^10.0.0",
     "@types/node": "^24.4.0",
+    "@types/supertest": "^6.0.3",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "@fastify/swagger": "^9.5.1",
+    "@scalar/fastify-api-reference": "^1.35.6",
     "dotenv": "^17.2.2",
-    "unplugin-swc": "^1.5.7"
+    "fastify": "^5.6.0",
+    "fastify-type-provider-zod": "^6.0.0",
+    "pino-pretty": "^13.1.1",
+    "supertest": "^7.1.4",
+    "unplugin-swc": "^1.5.7",
+    "zod": "^4.1.8"
   },
   "imports": {
     "#core/*": "./src/core/*",
     "#domain/*": "./src/domain/*",
+    "#infra/*": "./src/infra/*",
     "#test/*": "./src/test/*"
   }
 }

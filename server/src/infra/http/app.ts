@@ -1,0 +1,52 @@
+import fastifySwagger from '@fastify/swagger'
+import scalarApiReference from '@scalar/fastify-api-reference'
+import { fastify } from 'fastify'
+import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod'
+
+const app = fastify({
+  logger: {
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'SYS:h:MM:ss TT Z',
+        ignore: 'pid,hostname',
+      },
+    },
+  },
+}).withTypeProvider<ZodTypeProvider>()
+
+app.setSerializerCompiler(serializerCompiler)
+app.setValidatorCompiler(validatorCompiler)
+
+if (process.env.NODE_ENV === 'development') {
+  app.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: 'Warrior Foot API',
+        description: 'This Api is for the Warrior Foot game',
+        version: '1.0.0',
+      },
+    },
+    transform: jsonSchemaTransform,
+  })
+
+  app.register(scalarApiReference, {
+    routePrefix: '/docs',
+    configuration: {
+      theme: 'kepler',
+    },
+  })
+}
+
+app.get('/health', async (_request, reply) => {
+  return reply.status(200).send({
+    name: 'WarriorFoot API',
+    version: '1.0.0',
+    description: 'WarriorFoot API',
+    status: 'OK',
+  })
+})
+
+
+export { app }
