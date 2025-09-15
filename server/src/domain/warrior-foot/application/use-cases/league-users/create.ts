@@ -33,7 +33,7 @@ export class CreateLeagueUsersUseCase {
     const isLeagueValid = await this.leaguesRepository.findById(leagueId.toValue())
 
     if (!isLeagueValid) {
-      return failure(ResourceNotFound('The league referenced by the league user was not found'))
+      return failure(ResourceNotFound('The league referenced was not found'))
     }
 
     const leagueUser = LeagueUsers.create({ leagueId, userId, role })
