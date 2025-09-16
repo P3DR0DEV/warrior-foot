@@ -3,6 +3,9 @@ import scalarApiReference from '@scalar/fastify-api-reference'
 import { fastify } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod'
+import { errorHandler } from './error-handler.ts'
+import { leagueRoutes } from './routes/league/index.ts'
+import { userRoutes } from './routes/user/index.ts'
 
 const app = fastify({
   logger: {
@@ -48,5 +51,9 @@ app.get('/health', async (_request, reply) => {
   })
 })
 
+app.register(userRoutes, { prefix: '/users' })
+app.register(leagueRoutes, { prefix: '/leagues' })
+
+app.setErrorHandler(errorHandler)
 
 export { app }
