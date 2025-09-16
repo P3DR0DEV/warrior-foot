@@ -5,8 +5,8 @@ export class Code {
     return this.value
   }
 
-  static create() {
-    const code = new Code(Math.random().toString(36).substring(2, 15))
+  static create(existing?: string) {
+    const code = new Code(existing ?? Math.random().toString(36).substring(2, 15))
     
     return code
   }
