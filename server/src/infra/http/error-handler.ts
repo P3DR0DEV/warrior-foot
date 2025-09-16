@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { ZodError } from 'zod'
-import { AlreadyRegisteredEmailError, ResourceNotFoundError } from './util/errors'
+import { AlreadyRegisteredEmailError, ResourceNotFoundError } from './util/errors.ts'
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 

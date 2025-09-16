@@ -1,5 +1,9 @@
 export class Code {
-  constructor(private readonly value: string) {}
+  private readonly value: string
+
+  constructor(value: string) {
+    this.value = value
+  }
 
   toValue() {
     return this.value
