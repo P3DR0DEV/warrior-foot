@@ -29,4 +29,8 @@ export class User extends Entity<UserProps> {
   get email() {
     return this.props.email
   }
+
+  get password() {
+    return this.props.password
+  }
 }
