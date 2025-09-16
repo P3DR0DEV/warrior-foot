@@ -41,7 +41,7 @@ describe('Create User Use Case', () => {
 
     if (response.isFailure()) {
       const { name, message } = response.reason
-      expect(name).toBe('EmailAlreadyRegisteredError')
+      expect(name).toBe('AlreadyRegisteredEmailError')
       expect(message).toBe('The email pedro@mendes.com is already registered')
     }
   })

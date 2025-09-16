@@ -6,7 +6,6 @@ export function makeLeague(override: Partial<LeagueProps> = {}, id?: UniqueEntit
   const league = League.create(
     {
       name: faker.company.name(),
-      code: faker.string.nanoid(),
       userId: new UniqueEntityId(),
       ...override,
     },

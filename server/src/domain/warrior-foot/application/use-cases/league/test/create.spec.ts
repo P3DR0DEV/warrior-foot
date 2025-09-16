@@ -2,7 +2,7 @@ import { UniqueEntityId } from "#core/entities/unique-entity-id.ts"
 import { makeUser } from "#test/factories/make-user.ts"
 import  { InMemoryLeaguesRepository } from "#test/repositories/in-memo-leagues-repository.ts"
 import  { InMemoryUsersRepository } from "#test/repositories/in-memo-users-repository.ts"
-import  { CreateLeagueUseCase } from "../create"
+import  { CreateLeagueUseCase } from "../create.ts"
 
 let usersRepository: InMemoryUsersRepository
 let leaguesRepository: InMemoryLeaguesRepository
@@ -22,7 +22,7 @@ describe('Create League Use Case', () => {
 
     const response = await sut.execute({
       name: 'Test League',
-      userId: user.id,
+      userId: user.id.toString(),
     })
 
     expect(response.isSuccess()).toBeTruthy()
@@ -38,7 +38,7 @@ describe('Create League Use Case', () => {
   it('should return a failure if the user is not found', async () => {
     const response = await sut.execute({
       name: 'Test League',
-      userId: new UniqueEntityId(),
+      userId: new UniqueEntityId().toString(),
     })
 
     expect(response.isFailure()).toBeTruthy()

@@ -2,9 +2,9 @@ import { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
 import { ResourceNotFound, type ResourceNotFoundError } from '#core/errors/resource-not-found.ts'
 import { type Either, failure, success } from '#core/types/either.ts'
 import { LeagueUsers } from '#domain/warrior-foot/enterprise/entities/league-users.ts'
-import type { LeagueUsersRepository } from '../../repositories/league-users-repository'
-import type { LeaguesRepository } from '../../repositories/leagues-repository'
-import type { UsersRepository } from '../../repositories/users-repository'
+import type { LeagueUsersRepository } from '../../repositories/league-users-repository.ts'
+import type { LeaguesRepository } from '../../repositories/leagues-repository.ts'
+import type { UsersRepository } from '../../repositories/users-repository.ts'
 
 type LeagueUsersRole = 'owner' | 'guest'
 
