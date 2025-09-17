@@ -14,7 +14,15 @@ export class AlreadyRegisteredEmailError extends Error {
   }
 }
 
+export class InvalidCredentialsError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'InvalidCredentialsError'
+  }
+}
+
 export const errors = {
+  InvalidCredentialsError,
   ResourceNotFoundError,
   AlreadyRegisteredEmailError,
 }

@@ -1,9 +1,12 @@
+import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
 import scalarApiReference from '@scalar/fastify-api-reference'
 import { fastify } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod'
+import { env } from '#infra/env/index.ts'
 import { errorHandler } from './error-handler.ts'
+import { signInRoute } from './routes/auth/sign-in.ts'
 import { leagueRoutes } from './routes/league/index.ts'
 import { userRoutes } from './routes/user/index.ts'
 
@@ -42,6 +45,10 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+})
+
 app.get('/health', async (_request, reply) => {
   return reply.status(200).send({
     name: 'WarriorFoot API',
@@ -53,6 +60,7 @@ app.get('/health', async (_request, reply) => {
 
 app.register(userRoutes, { prefix: '/users' })
 app.register(leagueRoutes, { prefix: '/leagues' })
+app.register(signInRoute, { prefix: '/auth' })
 
 app.setErrorHandler(errorHandler)
 

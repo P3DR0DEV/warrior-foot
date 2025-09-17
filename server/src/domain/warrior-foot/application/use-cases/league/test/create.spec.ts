@@ -16,7 +16,7 @@ describe('Create League Use Case', () => {
   })
 
   it('should create a league', async () => {
-    const user = makeUser()
+    const user = await makeUser()
 
     await usersRepository.create(user)
 

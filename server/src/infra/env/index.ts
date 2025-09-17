@@ -8,6 +8,7 @@ export const envSchema = z.object({
   PORT: z.coerce.number().default(3333),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error', 'silent']).default('info'),
+  JWT_SECRET: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

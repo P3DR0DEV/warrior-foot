@@ -21,7 +21,7 @@ describe('Create league user use case', () => {
 
   it('should create a league user with owner role', async () => {
     const league = makeLeague()
-    const user = makeUser()
+    const user = await makeUser()
 
     await leaguesRepository.create(league)
     await usersRepository.create(user)
@@ -65,7 +65,7 @@ describe('Create league user use case', () => {
   })
 
   it('should return a failure if the league is not found', async () => {
-    const user = makeUser()
+    const user = await makeUser()
 
     await usersRepository.create(user)
 

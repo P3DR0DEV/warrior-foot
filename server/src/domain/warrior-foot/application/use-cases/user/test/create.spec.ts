@@ -1,6 +1,6 @@
 import { makeUser } from '#test/factories/make-user.ts'
 import { InMemoryUsersRepository } from '#test/repositories/in-memo-users-repository.ts'
-import { CreateUserUseCase } from '../create'
+import { CreateUserUseCase } from '../create.ts'
 
 let usersRepository: InMemoryUsersRepository
 let sut: CreateUserUseCase
@@ -29,7 +29,7 @@ describe('Create User Use Case', () => {
 
   it('should return a failure response if email is already registered', async () => {
     const email = 'pedro@mendes.com'
-    usersRepository.items.push(makeUser({ email }))
+    usersRepository.items.push(await makeUser({ email }))
 
     const response = await sut.execute({
       name: 'Pedro Mendes',

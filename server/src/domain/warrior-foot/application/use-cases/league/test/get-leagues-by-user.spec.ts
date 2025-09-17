@@ -16,7 +16,7 @@ describe('Get Leagues By User Use Case', () => {
   })
 
   it('should return a list of leagues', async () => {
-    const user = makeUser()
+    const user = await makeUser()
     await usersRepository.create(user)
 
     for (let i = 0; i < 3; i++) {
