@@ -34,13 +34,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-
   const decodedToken = jwtDecode<{ userId: string }>(token.value);
 
-
-  const session = CacheRepository.get(
-    `user-session:${decodedToken.userId}`
-  );
+  const session = CacheRepository.get(`user-session:${decodedToken.userId}`);
 
   if (!session) {
     const loginUrl = new URL("/login", request.url);

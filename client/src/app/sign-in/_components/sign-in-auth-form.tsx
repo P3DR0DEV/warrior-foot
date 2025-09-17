@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Label } from "@radix-ui/react-label";
 import { useEffect } from "react";

@@ -1,4 +1,4 @@
-'use server'
+"use server";
 
 import { z } from "zod";
 import { signIn } from "@/http/auth/sign-in";
@@ -34,7 +34,10 @@ export async function signInAction(data: FormData) {
     };
   }
 
-  await CacheRepository.set(`user-session:${result.data.userId}`, result.data.token);
+  await CacheRepository.set(
+    `user-session:${result.data.userId}`,
+    result.data.token,
+  );
 
   return {
     success: true,

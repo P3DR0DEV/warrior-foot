@@ -3,19 +3,21 @@
 import { z } from "zod";
 import { createUser } from "@/http/users/create-user";
 
-const createAccountSchema = z.object({
-  name: z.string().min(3, { message: "Insira o seu nome completo" }),
-  email: z.email({ message: "Email inválido" }),
-  password: z
-    .string()
-    .min(8, { message: "Senha deve ter no mínimo 8 caracteres" }),
-  confirmPassword: z
-    .string()
-    .min(8, { message: "Senha deve ter no mínimo 8 caracteres" }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "As senhas digitadas não coincidem",
-  path: ["confirmPassword"],
-});
+const createAccountSchema = z
+  .object({
+    name: z.string().min(3, { message: "Insira o seu nome completo" }),
+    email: z.email({ message: "Email inválido" }),
+    password: z
+      .string()
+      .min(8, { message: "Senha deve ter no mínimo 8 caracteres" }),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Senha deve ter no mínimo 8 caracteres" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas digitadas não coincidem",
+    path: ["confirmPassword"],
+  });
 
 export async function createAccountAction(data: FormData) {
   const validationResult = createAccountSchema.safeParse(
@@ -47,5 +49,5 @@ export async function createAccountAction(data: FormData) {
     success: true,
     message: null,
     validationErrors: null,
-  }
+  };
 }

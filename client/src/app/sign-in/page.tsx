@@ -15,7 +15,6 @@ export default function SignIn() {
         </div>
 
         <SignInAuthForm />
-        
       </div>
     </div>
   );
