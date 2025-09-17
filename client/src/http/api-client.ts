@@ -1,21 +1,22 @@
-'use server'
+"use server";
 
-import ky, { type KyRequest } from 'ky'
-import { cookies } from 'next/headers'
+import ky, { type KyRequest } from "ky";
+import { cookies } from "next/headers";
+import { env } from "@/env";
 
 async function getTokenOnCookie(request: KyRequest) {
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
 
-  const token = cookieStore.get('token')?.value
+  const token = cookieStore.get("token")?.value;
 
   if (token) {
-    request.headers.set('Authorization', `Bearer ${token}`)
+    request.headers.set("Authorization", `Bearer ${token}`);
   }
 }
 
 export const warriorfootApi = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+  prefixUrl: env.API_URL,
   hooks: {
     beforeRequest: [getTokenOnCookie],
   },
-})
+});
