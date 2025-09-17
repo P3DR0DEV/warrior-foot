@@ -12,10 +12,12 @@ const createAccountSchema = z.object({
   confirmPassword: z
     .string()
     .min(8, { message: "Senha deve ter no mínimo 8 caracteres" }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "As senhas digitadas não coincidem",
+  path: ["confirmPassword"],
 });
 
 export async function createAccountAction(data: FormData) {
-  console.log(data);
   const validationResult = createAccountSchema.safeParse(
     Object.fromEntries(data),
   );
@@ -30,16 +32,7 @@ export async function createAccountAction(data: FormData) {
     };
   }
 
-  const { name, email, password, confirmPassword } = validationResult.data;
-
-  if (password !== confirmPassword) {
-    return {
-      success: false,
-      message: "Senhas não coincidem",
-      validationErrors: null,
-    };
-  }
-
+  const { name, email, password } = validationResult.data;
   const result = await createUser({ name, email, password });
 
   if (!result.success) {
