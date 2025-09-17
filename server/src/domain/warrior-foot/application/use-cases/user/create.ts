@@ -1,3 +1,4 @@
+import { HashPassword } from '#core/entities/hash-password.ts'
 import { AlreadyRegisteredEmail, type AlreadyRegisteredEmailError } from '#core/errors/already-registered-email.ts'
 import { type Either, failure, success } from '#core/types/either.ts'
 import type { UsersRepository } from '#domain/warrior-foot/application/repositories/users-repository.ts'
@@ -12,7 +13,10 @@ interface CreateUserProps {
 type CreateUserUseCaseResponse = Either<AlreadyRegisteredEmailError, { user: User }>
 
 export class CreateUserUseCase {
-  constructor(private readonly repository: UsersRepository) {}
+  private readonly repository: UsersRepository
+  constructor(repository: UsersRepository) {
+    this.repository = repository
+  }
 
   async execute({ name, email, password }: CreateUserProps): Promise<CreateUserUseCaseResponse> {
     const isEmailAlreadyRegistered = await this.repository.findByEmail(email)
@@ -21,7 +25,9 @@ export class CreateUserUseCase {
       return failure(AlreadyRegisteredEmail(`The email ${email} is already registered`))
     }
 
-    const user = User.create({ name, email, password })
+    const passwordHash = await HashPassword.generateHash(password)
+
+    const user = User.create({ name, email, password: passwordHash })
 
     await this.repository.create(user)
 

@@ -4,7 +4,7 @@ import { makeUser } from '#test/factories/make-user.ts'
 import { InMemoryLeagueUsersRepository } from '#test/repositories/in-memo-league-users-repository.ts'
 import { InMemoryLeaguesRepository } from '#test/repositories/in-memo-leagues-repository.ts'
 import { InMemoryUsersRepository } from '#test/repositories/in-memo-users-repository.ts'
-import { CreateLeagueUsersUseCase } from '../create'
+import { CreateLeagueUsersUseCase } from '../create.ts'
 
 let leaguesRepository: InMemoryLeaguesRepository
 let usersRepository: InMemoryUsersRepository
@@ -27,10 +27,11 @@ describe('Create league user use case', () => {
     await usersRepository.create(user)
 
     const response = await sut.execute({
-      leagueId: league.id,
-      userId: user.id,
+      leagueId: league.id.toString(),
+      userId: user.id.toString(),
       role: 'owner',
     })
+
     expect(response.isSuccess()).toBeTruthy()
 
     if (response.isSuccess()) {
@@ -48,8 +49,8 @@ describe('Create league user use case', () => {
     await leaguesRepository.create(league)
 
     const response = await sut.execute({
-      leagueId: league.id,
-      userId: new UniqueEntityId(),
+      leagueId: league.id.toString(),
+      userId: new UniqueEntityId().toString(),
       role: 'owner',
     })
 
@@ -69,8 +70,8 @@ describe('Create league user use case', () => {
     await usersRepository.create(user)
 
     const response = await sut.execute({
-      leagueId: new UniqueEntityId(),
-      userId: user.id,
+      leagueId: new UniqueEntityId().toString(),
+      userId: user.id.toString(),
       role: 'owner',
     })
 

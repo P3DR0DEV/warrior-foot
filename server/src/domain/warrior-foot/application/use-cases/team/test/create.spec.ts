@@ -2,7 +2,7 @@ import { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
 import { makeLeague } from '#test/factories/make-league.ts'
 import { InMemoryLeaguesRepository } from '#test/repositories/in-memo-leagues-repository.ts'
 import { InMemoryTeamsRepository } from '#test/repositories/in-memo-teams-repository.ts'
-import { CreateTeamUseCase } from '../create'
+import { CreateTeamUseCase } from '../create.ts'
 
 let teamsRepository: InMemoryTeamsRepository
 let leaguesRepository: InMemoryLeaguesRepository
@@ -24,7 +24,7 @@ describe('Create Team Use Case', () => {
       primaryColor: '#ff0000',
       secondaryColor: '#0000ff',
       division: 'A',
-      leagueId: league.id,
+      leagueId: league.id.toString(),
     })
 
     expect(response.isSuccess()).toBe(true)
@@ -47,7 +47,7 @@ describe('Create Team Use Case', () => {
       primaryColor: '#ff0000',
       secondaryColor: '#0000ff',
       division: 'A',
-      leagueId: new UniqueEntityId(),
+      leagueId: new UniqueEntityId().toString(),
     })
 
     expect(response.isFailure()).toBe(true)

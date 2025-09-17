@@ -1,30 +1,42 @@
-// import 'dotenv/config'
+import { PrismaClient } from '#prisma/index.js'
+import 'dotenv/config'
+import { execSync } from 'node:child_process'
+import { randomUUID } from 'node:crypto'
 
-// import { execSync } from 'node:child_process'
-// import { randomUUID } from 'node:crypto'
+function generateDatabaseUrl(schemaId: string) {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('Please set DATABASE_URL env variable')
+  }
+  const url = new URL(process.env.DATABASE_URL)
+  url.searchParams.set('schema', schemaId)
+  return url.toString()
+}
 
-// import { PrismaClient } from '@prisma/client'
+const schemaId = randomUUID()
+const databaseUrl = generateDatabaseUrl(schemaId)
 
-// const prisma = new PrismaClient()
+// Cria um cliente temporário para limpar o schema
+const tempPrisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL,
+})
 
-// function generateDatabaseUrl(schemaId: string) {
-//   if (!process.env.DATABASE_URL) {
-//     throw new Error('Please set DATABASE_URL env variable')
-//   }
+// Limpa o schema antes de configurar os testes
+await tempPrisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`)
+await tempPrisma.$executeRawUnsafe(`CREATE SCHEMA "${schemaId}"`)
+await tempPrisma.$disconnect()
 
-//   const url = new URL(process.env.DATABASE_URL)
-//   url.searchParams.set('schema', schemaId)
+// Agora configura a URL do banco para o schema limpo
+process.env.DATABASE_URL = databaseUrl
 
-//   return url.toString()
-// }
+// Aplica as migrações no schema limpo
+execSync('pnpx prisma db push', { stdio: 'inherit' })
 
-// const schemaId = randomUUID()
-// const databaseUrl = generateDatabaseUrl(schemaId)
-// process.env.DATABASE_URL = databaseUrl
+// Cliente final para os testes
+const prisma = new PrismaClient({
+  datasourceUrl: databaseUrl,
+})
 
-// execSync('pnpx prisma migrate deploy')
-
-// afterAll(async () => {
-//   await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`)
-//   await prisma.$disconnect()
-// })
+afterAll(async () => {
+  await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`)
+  await prisma.$disconnect()
+})

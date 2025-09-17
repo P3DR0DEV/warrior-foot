@@ -1,7 +1,7 @@
 import { Entity } from '#core/entities/entity.ts'
 import type { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
 import type { Optional } from '#core/types/optional.ts'
-import { Code } from '../value-objects/code'
+import { Code } from '../value-objects/code.ts'
 
 export interface LeagueProps {
   name: string
