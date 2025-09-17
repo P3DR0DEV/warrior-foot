@@ -7,7 +7,6 @@ interface SignIn {
 }
 
 interface SignInResponse {
-  userId: string;
   token: string;
 }
 

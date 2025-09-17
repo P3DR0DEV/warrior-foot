@@ -1,5 +1,7 @@
 "use server";
 
+import { jwtDecode } from "jwt-decode";
+import { cookies } from "next/headers";
 import { z } from "zod";
 import { signIn } from "@/http/auth/sign-in";
 import { CacheRepository } from "@/infra/cache/redis-cache-repository";
@@ -34,9 +36,19 @@ export async function signInAction(data: FormData) {
     };
   }
 
+  const payload = jwtDecode<{ userId: string }>(result.data.token);
+
+  const cookie = await cookies()
+
+  cookie.set("userId", payload.userId, {
+    path: "/",
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 30,
+  });
+
   await CacheRepository.set(
-    `user-session:${result.data.userId}`,
-    result.data.token,
+    `user-session:${payload.userId}`,
+    JSON.stringify(payload),
   );
 
   return {
