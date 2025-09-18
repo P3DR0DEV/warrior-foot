@@ -12,6 +12,7 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
         tags: ['League'],
         summary: 'Invite a friend to a league',
         description: 'This route invites friends to a league',
+        security: [{ bearerAuth: [] }],
         params: z.object({
           leagueId: z.uuid(),
         }),

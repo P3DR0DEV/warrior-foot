@@ -13,6 +13,7 @@ export const getLeaguesByUserRoute: FastifyPluginAsyncZod = async (app) => {
         tags: ['League'],
         summary: 'Get leagues by user',
         description: 'This route returns a list of leagues for a given user',
+        security: [{ bearerAuth: [] }],
         params: z.object({
           userId: z.uuid(),
         }),
