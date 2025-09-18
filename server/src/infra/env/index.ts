@@ -9,6 +9,8 @@ export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error', 'silent']).default('info'),
   JWT_SECRET: z.string(),
+  EMAIL_USER: z.email(),
+  EMAIL_PASSWORD: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)
