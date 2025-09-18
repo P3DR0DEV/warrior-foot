@@ -21,8 +21,18 @@ export class InvalidCredentialsError extends Error {
   }
 }
 
+export class UnauthorizedError extends Error {
+  constructor(message: string) {
+    super(message, {
+      cause: errors,
+    })
+    this.name = 'UnauthorizedError'
+  }
+}
+
 export const errors = {
   InvalidCredentialsError,
   ResourceNotFoundError,
   AlreadyRegisteredEmailError,
+  UnauthorizedError,
 }

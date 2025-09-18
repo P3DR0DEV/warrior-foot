@@ -1,10 +1,11 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
+import { auth } from '#infra/http/hooks/check-jwt.ts'
 import { errors } from '#infra/http/util/errors.ts'
 import { inviteFriendsUseCase } from '../factories/make-invite-friends.ts'
 
 export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
-  app.post(
+  app.register(auth).post(
     '/:leagueId/invite',
     {
       schema: {
@@ -48,6 +49,7 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const { leagueId } = request.params
       const { email, name } = request.body
+      const { name: inviter } = await request.getCurrentUser()
 
       const response = await inviteFriendsUseCase.execute({ leagueId, email, inviter, name })
 

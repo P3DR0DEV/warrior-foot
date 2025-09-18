@@ -1,11 +1,12 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
+import { auth } from '#infra/http/hooks/check-jwt.ts'
 import { errors } from '#infra/http/util/errors.ts'
 import { getLeaguesByUserUseCase } from '../factories/make-get-leagues-by-user.ts'
 import { LeaguePresenter } from '../presenters/league-presenter.ts'
 
 export const getLeaguesByUserRoute: FastifyPluginAsyncZod = async (app) => {
-  app.get(
+  app.register(auth).get(
     '/:userId',
     {
       schema: {
@@ -18,12 +19,14 @@ export const getLeaguesByUserRoute: FastifyPluginAsyncZod = async (app) => {
         response: {
           200: z
             .object({
-              leagues: z.array(z.object({
-                id: z.uuid(),
-                name: z.string(),
-                code: z.string(),
-                userId: z.string(),
-              })),
+              leagues: z.array(
+                z.object({
+                  id: z.uuid(),
+                  name: z.string(),
+                  code: z.string(),
+                  userId: z.string(),
+                }),
+              ),
             })
             .describe('Leagues list for the user'),
           400: z
@@ -48,7 +51,12 @@ export const getLeaguesByUserRoute: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
+      const { id } = await request.getCurrentUser()
       const { userId } = request.params
+
+      if (userId !== id) {
+        throw new errors.UnauthorizedError('You are not authorized to access this resource.')
+      }
 
       const response = await getLeaguesByUserUseCase.execute({ userId })
 

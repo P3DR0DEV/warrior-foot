@@ -13,7 +13,7 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
         tags: ['User'],
         summary: 'Create a new user',
         description:
-          'This route creates a new user, when the user is created it will generate a League for the user with 32 different teams',
+          'This route creates a new user, when the user is created it will generate a League for the user.',
         body: z.object({
           name: z.string(),
           email: z.email(),

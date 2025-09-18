@@ -1,11 +1,12 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
+import { auth } from '#infra/http/hooks/check-jwt.ts'
 import { errors } from '#infra/http/util/errors.ts'
 import { createLeagueUseCase } from '../factories/make-create-league.ts'
 import { LeaguePresenter } from '../presenters/league-presenter.ts'
 
 export const createNewLeagueRoute: FastifyPluginAsyncZod = async (app) => {
-  app.post(
+  app.register(auth).post(
     '/',
     {
       schema: {
@@ -49,6 +50,8 @@ export const createNewLeagueRoute: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
+      await request.getCurrentUser()
+      
       const { name, userId } = request.body
 
       const response = await createLeagueUseCase.execute({
