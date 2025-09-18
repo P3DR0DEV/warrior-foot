@@ -7,7 +7,7 @@ import { LeaguePresenter } from '../presenters/league-presenter.ts'
 
 export const getLeaguesByUserRoute: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(
-    '/:userId',
+    '/:userId/leagues',
     {
       schema: {
         tags: ['League'],
