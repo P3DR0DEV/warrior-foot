@@ -1,6 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { errors } from '#infra/http/util/errors.ts'
+import { inviteFriendsUseCase } from '../factories/make-invite-friends.ts'
 
 export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
   app.post(
@@ -60,9 +61,9 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
         throw new Error(message)
       }
 
-      const { league } = response.value
+      const { message } = response.value
 
-      return reply.status(201).send({ message: 'Email sent successfully' })
+      return reply.status(201).send({ message: `Email ${message} sent successfully` })
     },
   )
 }
