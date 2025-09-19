@@ -19,7 +19,7 @@ export function CreateAccount() {
 
   function onSuccess() {
     toast.success("Autenticado com sucesso!");
-    router.push("/admin");
+    router.push("/sign-in");
   }
 
   useEffect(() => {

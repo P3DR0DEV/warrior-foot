@@ -1,5 +1,6 @@
-'use client'
-import { Button } from "@/components/ui/button";
+"use client";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 import { InviteFriendDialog } from "./invite-friend-dialog";
 
 export function Navbar() {
@@ -9,9 +10,9 @@ export function Navbar() {
 
       <div className="flex gap-4">
         <InviteFriendDialog />
-        <Button variant={"secondary"} className="cursor-pointer" onClick={() => console.log("LogOut")}>
+        <Link className={buttonVariants({ variant: "outline" })} href="/api/auth/sign-out">
           LogOut
-        </Button>
+        </Link>
       </div>
     </div>
   );

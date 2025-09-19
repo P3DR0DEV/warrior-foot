@@ -11,6 +11,13 @@ const signInSchema = z.object({
   password: z.string(),
 });
 
+type UserForPayload = {
+  id: string
+  name: string
+  email: string
+}
+
+
 export async function signInAction(data: FormData) {
   const validationResult = signInSchema.safeParse(Object.fromEntries(data));
 
@@ -36,18 +43,24 @@ export async function signInAction(data: FormData) {
     };
   }
 
-  const payload = jwtDecode<{ userId: string }>(result.data.token);
+  const payload = jwtDecode<{ user: UserForPayload }>(result.data.token);
 
   const cookie = await cookies()
 
-  cookie.set("userId", payload.userId, {
+  cookie.set("userId", payload.user.id, {
+    path: "/",
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 30,
+  });
+
+  cookie.set("token", result.data.token, {
     path: "/",
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 30,
   });
 
   await CacheRepository.set(
-    `user-session:${payload.userId}`,
+    `user-session:${payload.user.id}`,
     JSON.stringify(payload),
   );
 

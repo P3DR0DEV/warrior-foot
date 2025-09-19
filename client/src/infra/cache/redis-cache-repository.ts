@@ -27,7 +27,7 @@ export const CacheRepository = {
     return await cache.get<T>(key);
   },
 
-  async delete(key: string | Array<string>): Promise<void> {
-    await cache.del(...key);
+  async delete(key: string): Promise<void> {
+    await cache.del(key);
   },
 };

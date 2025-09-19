@@ -7,19 +7,19 @@ import { Navbar } from "./_components/navbar";
 export default async function AuthRequiredLayout({children}:{children:React.ReactNode}) {
   const cookie = await cookies();
 
-  // const token = cookie.get("token");
+  const token = cookie.get("token");
 
-  // if (!token) {
-  //   redirect("/sign-in");
-  // }
+  if (!token) {
+    redirect("/sign-in");
+  }
 
-  // const decodedToken = jwtDecode<{ userId: string }>(token.value);
+  const decodedToken = jwtDecode<{ userId: string }>(token.value);
 
-  // const session = CacheRepository.get(`user-session:${decodedToken.userId}`);
+  const session = CacheRepository.get(`user-session:${decodedToken.userId}`);
 
-  // if (!session) {
-  //   redirect("/sign-in");
-  // }
+  if (!session) {
+    redirect("/sign-in");
+  }
   return(
     <>
       <Navbar/>

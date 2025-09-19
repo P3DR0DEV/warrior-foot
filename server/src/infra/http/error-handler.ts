@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { ZodError } from 'zod'
-import { AlreadyRegisteredEmailError, ResourceNotFoundError, UnauthorizedError } from './util/errors.ts'
+import { AlreadyRegisteredEmailError, InvalidCredentialsError, ResourceNotFoundError, UnauthorizedError } from './util/errors.ts'
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 
@@ -39,6 +39,14 @@ export const errorHandler: FastifyErrorHandler = (error, _request, reply) => {
     })
   }
 
+  if (error instanceof InvalidCredentialsError) {
+    return reply.status(401).send({
+      name: error.name,
+      cause: error.cause,
+      message: error.message,
+    })
+  }
+  // 500 - Internal Server Error
   return reply.status(500).send({
     message: 'Internal Server Error',
   })
