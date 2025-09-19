@@ -13,7 +13,6 @@ export const createNewLeagueRoute: FastifyPluginAsyncZod = async (app) => {
         tags: ['League'],
         summary: 'Create a new league',
         description: 'This route creates a new league in warrior foot',
-        security: [{ bearerAuth: [] }],
         body: z.object({
           name: z.string(),
           userId: z.string(),

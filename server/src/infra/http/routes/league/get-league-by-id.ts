@@ -12,7 +12,6 @@ export const getLeagueByIdRoute: FastifyPluginAsyncZod = async (app) => {
         tags: ['League'],
         summary: 'Get league by id',
         description: 'This route returns a league by id',
-        security: [{ bearerAuth: [] }],
         params: z.object({
           leagueId: z.uuid(),
         }),
