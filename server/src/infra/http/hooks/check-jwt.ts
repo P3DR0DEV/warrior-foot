@@ -14,16 +14,16 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
     // Insert into request the methods to get the current user
     request.getCurrentUser = async () => {
       try {
-        const { email, id, name } = await request.jwtVerify<TokenPayload>()
+        const { user } = await request.jwtVerify<{user: TokenPayload}>()
 
-        if ( !email || !id || !name) {
+        if (!user.email || !user.id || !user.name) {
           throw new UnauthorizedError('Invalid auth token.')
         }
 
         return {
-          id,
-          name,
-          email,
+          id: user.id,
+          name: user.name,
+          email: user.email,
         }
       } catch (_error) {
         throw new UnauthorizedError('Invalid auth token.')

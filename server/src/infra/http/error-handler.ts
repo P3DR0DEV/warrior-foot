@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { ZodError } from 'zod'
-import { AlreadyRegisteredEmailError, ResourceNotFoundError } from './util/errors.ts'
+import { AlreadyRegisteredEmailError, ResourceNotFoundError, UnauthorizedError } from './util/errors.ts'
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 
@@ -25,6 +25,14 @@ export const errorHandler: FastifyErrorHandler = (error, _request, reply) => {
 
   if (error instanceof ResourceNotFoundError) {
     return reply.status(404).send({
+      name: error.name,
+      cause: error.cause,
+      message: error.message,
+    })
+  }
+
+  if (error instanceof UnauthorizedError) {
+    return reply.status(401).send({
       name: error.name,
       cause: error.cause,
       message: error.message,

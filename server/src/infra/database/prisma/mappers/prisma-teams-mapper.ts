@@ -13,7 +13,9 @@ export class PrismaTeamsMapper {
       division: raw.division,
       leagueId,
       createdAt: raw.createdAt,
-    })
+    },
+    new UniqueEntityId(raw.id),
+  )
   }
 
   static toPersistence(team: Team): Prisma.TeamUncheckedCreateInput {
