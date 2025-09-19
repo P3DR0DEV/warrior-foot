@@ -5,7 +5,7 @@ import { Team } from '#domain/warrior-foot/enterprise/entities/team.ts'
 import type { LeaguesRepository } from '../../repositories/leagues-repository.ts'
 import type { TeamsRepository } from '../../repositories/teams-repository.ts'
 
-type LeagueWithTeams = {
+export type LeagueWithTeams = {
   id: UniqueEntityId
   name: string
   code: string
