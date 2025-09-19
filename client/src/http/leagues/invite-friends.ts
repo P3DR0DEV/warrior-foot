@@ -25,7 +25,7 @@ type InviteFriendsResult =
 export async function inviteFriends(data: InviteFriends): Promise<InviteFriendsResult> {
   try {
     const response = await warriorfootApi
-      .post("leagues/c60b384d-0529-424d-8ab6-98b36182988a/invite", {
+      .post("leagues/invite", {
         json: data,
       })
       .json<InviteFriendsResponse>();

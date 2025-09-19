@@ -2,19 +2,17 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { auth } from '#infra/http/hooks/check-jwt.ts'
 import { errors } from '#infra/http/util/errors.ts'
+import { getLeaguesByUserUseCase } from '../factories/make-get-leagues-by-user.ts'
 import { inviteFriendsUseCase } from '../factories/make-invite-friends.ts'
 
 export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).post(
-    '/:leagueId/invite',
+    '/invite',
     {
       schema: {
         tags: ['League'],
         summary: 'Invite a friend to a league',
         description: 'This route invites friends to a league',
-        params: z.object({
-          leagueId: z.uuid(),
-        }),
         body: z.object({
           name: z.string(),
           email: z.email(),
@@ -47,11 +45,21 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
-      const { leagueId } = request.params
       const { email, name } = request.body
-      const { name: inviter } = await request.getCurrentUser()
+      const { id, name: inviter } = await request.getCurrentUser()
 
-      const response = await inviteFriendsUseCase.execute({ leagueId, email, inviter, name })
+      const league = await getLeaguesByUserUseCase.execute({ userId: id })
+
+      if (league.isFailure()) {
+        const { name, message } = league.reason
+
+        throw new errors[name](message)
+      }
+
+      const { leagues } = league.value
+      
+
+      const response = await inviteFriendsUseCase.execute({ leagueId:leagues[0].id.toString(), email, inviter, name })
 
       if (response.isFailure()) {
         const { name, message } = response.reason
