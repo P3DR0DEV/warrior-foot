@@ -24,6 +24,15 @@ export const getLeagueByIdRoute: FastifyPluginAsyncZod = async (app) => {
                 name: z.string(),
                 code: z.string(),
                 userId: z.string(),
+                teams: z.array(
+                  z.object({
+                    id: z.uuid(),
+                    name: z.string(),
+                    division: z.string(),
+                    primaryColor: z.string(),
+                    secondaryColor: z.string(),
+                  }),
+                ),
               }),
             })
             .describe('League found successfully'),
@@ -61,7 +70,7 @@ export const getLeagueByIdRoute: FastifyPluginAsyncZod = async (app) => {
 
       const { league } = response.value
 
-      return reply.status(200).send({ league: LeaguePresenter.toHTTP(league) })
+      return reply.status(200).send({ league: LeaguePresenter.withTeams(league) })
     },
   )
 }

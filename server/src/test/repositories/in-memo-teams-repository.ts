@@ -2,6 +2,9 @@ import type { TeamsRepository } from '#domain/warrior-foot/application/repositor
 import type { Team } from '#domain/warrior-foot/enterprise/entities/team.ts'
 
 export class InMemoryTeamsRepository implements TeamsRepository {
+  async createMany(teams: Team[]): Promise<void> {
+    this.items.push(...teams)
+  }
   public items: Team[] = []
 
   async findById(id: string): Promise<Team | null> {

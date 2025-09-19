@@ -24,7 +24,7 @@ describe('Test Get Leagues By User (E2E)', () => {
       await leagueFactory.createLeague({ userId: user.id })
     }
 
-    const response = await supertest(app.server).get(`/leagues/${user.id}`)
+    const response = await supertest(app.server).get(`/leagues/${user.id}/leagues`)
 
     expect(response.statusCode).toEqual(200)
 

@@ -9,6 +9,15 @@ export class PrismaTeamsRepository implements TeamsRepository {
   constructor(prisma: PrismaClient) {
     this.prisma = prisma;
   }
+  
+  
+  async createMany(teams: Team[]): Promise<void> {
+    const data = teams.map(PrismaTeamsMapper.toPersistence);
+
+    await this.prisma.team.createMany({
+      data,
+    });
+  }
 
   async findById(id: string): Promise<Team | null> {
     const team = await this.prisma.team.findUnique({
