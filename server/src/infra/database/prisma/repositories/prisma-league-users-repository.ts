@@ -9,6 +9,16 @@ export class PrismaLeagueUsersRepository implements LeagueUsersRepository {
   constructor(prisma: PrismaClient) {
     this.prisma = prisma
   }
+  
+  async findByUserId(userId: string): Promise<LeagueUsers[]> {
+    const leagueUsers = await this.prisma.leagueUsers.findMany({
+      where: {
+        userId,
+      },
+    })
+    
+    return leagueUsers.map(PrismaLeagueUsersMapper.toDomain)
+  }
 
   async create(leagueUser: LeagueUsers): Promise<void> {
     const data = PrismaLeagueUsersMapper.toPersistence(leagueUser)
