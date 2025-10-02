@@ -27,6 +27,14 @@ export const getLeaguesByUserRoute: FastifyPluginAsyncZod = async (app) => {
                   userId: z.string(),
                 }),
               ),
+              otherLeagues: z.array(
+                z.object({
+                  id: z.uuid(),
+                  name: z.string(),
+                  code: z.string(),
+                  userId: z.string(),
+                }),
+              ),
             })
             .describe('Leagues list for the user'),
           400: z
@@ -66,9 +74,9 @@ export const getLeaguesByUserRoute: FastifyPluginAsyncZod = async (app) => {
         throw new errors[name](message)
       }
 
-      const { leagues } = response.value
+      const { myLeagues, otherLeagues } = response.value
 
-      return reply.status(200).send({ leagues: leagues.map(LeaguePresenter.toHTTP) })
+      return reply.status(200).send({ leagues: myLeagues.map(LeaguePresenter.toHTTP), otherLeagues: otherLeagues.map(LeaguePresenter.toHTTP) })
     },
   )
 }

@@ -23,4 +23,14 @@ export class InMemoryLeaguesRepository implements LeaguesRepository {
   async create(league: League): Promise<void> {
     this.items.push(league)
   }
+
+  async findByCode(code: string): Promise<League | null> {
+    const league = this.items.find((item) => item.code === code)
+
+    if (!league) {
+      return null
+    }
+
+    return league
+  }
 }

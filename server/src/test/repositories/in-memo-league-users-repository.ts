@@ -3,8 +3,14 @@ import type { LeagueUsers } from "#domain/warrior-foot/enterprise/entities/leagu
 
 export class InMemoryLeagueUsersRepository implements LeagueUsersRepository {
   public leagueUsers: LeagueUsers[] = []
-
+  
   async create(leagueUser: LeagueUsers): Promise<void> {
     await this.leagueUsers.push(leagueUser)
+  }
+
+  async findByUserId(userId: string): Promise<LeagueUsers[]> {
+    const leagueUsers = this.leagueUsers.filter((leagueUser) => leagueUser.userId.toValue() === userId)
+
+    return leagueUsers
   }
 }
