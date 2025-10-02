@@ -11,6 +11,9 @@ export const envSchema = z.object({
   JWT_SECRET: z.string(),
   EMAIL_USER: z.email(),
   EMAIL_PASSWORD: z.string(),
+  CLIENT_URL: z.url(),
+  UPSTASH_REDIS_REST_URL: z.url(),
+  UPSTASH_REDIS_REST_TOKEN: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

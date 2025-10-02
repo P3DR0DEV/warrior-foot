@@ -17,11 +17,19 @@ interface CreateLeagueUsersRequest {
 type CreateLeagueUsersResponse = Either<ResourceNotFoundError, { leagueUser: LeagueUsers }>
 
 export class CreateLeagueUsersUseCase {
+  private readonly repository: LeagueUsersRepository
+  private readonly usersRepository: UsersRepository
+  private readonly leaguesRepository: LeaguesRepository
+
   constructor(
-    private readonly leagueUsersRepository: LeagueUsersRepository,
-    private readonly leaguesRepository: LeaguesRepository,
-    private readonly usersRepository: UsersRepository,
-  ) { }
+    leagueUsersRepository: LeagueUsersRepository,
+    leaguesRepository: LeaguesRepository,
+    usersRepository: UsersRepository,
+  ) {
+    this.repository = leagueUsersRepository
+    this.leaguesRepository = leaguesRepository
+    this.usersRepository = usersRepository
+  }
 
   async execute({ leagueId, userId, role }: CreateLeagueUsersRequest): Promise<CreateLeagueUsersResponse> {
     const isUserValid = await this.usersRepository.findById(userId)
@@ -38,7 +46,7 @@ export class CreateLeagueUsersUseCase {
 
     const leagueUser = LeagueUsers.create({ leagueId: new UniqueEntityId(leagueId), userId: new UniqueEntityId(userId), role })
 
-    await this.leagueUsersRepository.create(leagueUser)
+    await this.repository.create(leagueUser)
 
     return success({ leagueUser })
   }

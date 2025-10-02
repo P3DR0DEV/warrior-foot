@@ -41,4 +41,18 @@ export class PrismaLeaguesRepository implements LeaguesRepository {
       data,
     })
   }
+
+  async findByCode(code: string): Promise<League | null> {
+    const league = await this.prisma.league.findUnique({
+      where: {
+        code,
+      },
+    })
+
+    if (!league) {
+      return null
+    }
+
+    return PrismaLeaguesMapper.toDomain(league)
+  }
 }

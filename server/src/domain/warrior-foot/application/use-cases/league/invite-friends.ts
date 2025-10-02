@@ -28,8 +28,10 @@ export class InviteFriendsUseCase {
       return failure(ResourceNotFound('The league referenced by the user was not found'))
     }
 
+    const { code } = league
+
     try {      
-      await this.emailProvider.sendEmail({ email, name, inviter })
+      await this.emailProvider.sendEmail({ email, name, inviter, code })
     } catch (error) {
       return failure(new Error('Error sending email', { cause: error }))
     }

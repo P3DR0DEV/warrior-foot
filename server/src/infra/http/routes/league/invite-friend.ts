@@ -2,8 +2,11 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { auth } from '#infra/http/hooks/check-jwt.ts'
 import { errors } from '#infra/http/util/errors.ts'
+import { CacheRepository } from '#infra/lib/redis.ts'
 import { getLeaguesByUserUseCase } from '../factories/make-get-leagues-by-user.ts'
 import { inviteFriendsUseCase } from '../factories/make-invite-friends.ts'
+
+const CACHE_EXPIRE = 72 * 60 * 60; // 72 hours
 
 export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).post(
@@ -57,9 +60,8 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
       }
 
       const { leagues } = league.value
-      
 
-      const response = await inviteFriendsUseCase.execute({ leagueId:leagues[0].id.toString(), email, inviter, name })
+      const response = await inviteFriendsUseCase.execute({ leagueId: leagues[0].id.toString(), email, inviter, name })
 
       if (response.isFailure()) {
         const { name, message } = response.reason
@@ -73,7 +75,17 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
 
       const { message } = response.value
 
-      return reply.status(201).send({ message: `Email ${message} sent successfully` })
+      const inviteData = {
+        name,
+        email,
+        inviter,
+        code: leagues[0].code,
+        created_at: new Date().toISOString(),
+      }
+
+      await CacheRepository.set(`invite:${leagues[0].code}`, JSON.stringify(inviteData), CACHE_EXPIRE)
+
+      return reply.status(201).send({ message })
     },
   )
 }
