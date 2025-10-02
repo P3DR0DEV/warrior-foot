@@ -1,6 +1,7 @@
 import { ResourceNotFound, type ResourceNotFoundError } from '#core/errors/resource-not-found.ts'
 import { type Either, failure, success } from '#core/types/either.ts'
 import type { League } from '#domain/warrior-foot/enterprise/entities/league.ts'
+import type { LeagueUsersRepository } from '../../repositories/league-users-repository.ts'
 import type { LeaguesRepository } from '../../repositories/leagues-repository.ts'
 import type { UsersRepository } from '../../repositories/users-repository.ts'
 
@@ -8,15 +9,17 @@ interface GetLeaguesByUserRequest {
   userId: string
 }
 
-type GetLeaguesByUserResponse = Either<ResourceNotFoundError, { leagues: League[] }>
+type GetLeaguesByUserResponse = Either<ResourceNotFoundError, { myLeagues: League[], otherLeagues: League[] }>
 
 export class GetLeaguesByUserUseCase {
   private readonly leaguesRepository: LeaguesRepository
   private readonly usersRepository: UsersRepository
+  private readonly leagueUsersRepository: LeagueUsersRepository
 
-  constructor(leaguesRepository: LeaguesRepository, usersRepository: UsersRepository) {
+  constructor(leaguesRepository: LeaguesRepository, usersRepository: UsersRepository, leagueUsersRepository: LeagueUsersRepository) {
     this.leaguesRepository = leaguesRepository
     this.usersRepository = usersRepository
+    this.leagueUsersRepository = leagueUsersRepository
   }
 
   async execute({ userId }: GetLeaguesByUserRequest): Promise<GetLeaguesByUserResponse> {
@@ -26,8 +29,20 @@ export class GetLeaguesByUserUseCase {
       return failure(ResourceNotFound('The user referenced by the league was not found'))
     }
 
-    const leagues = await this.leaguesRepository.findByUserId(userId)
+    const [leagues, leagueUsers] = await Promise.all([this.leaguesRepository.findByUserId(userId), this.leagueUsersRepository.findByUserId(userId)])
 
-    return success({ leagues })
+    const otherLeagues: League[] = []
+
+    leagueUsers.forEach(async leagueUser => {
+      const league = await this.leaguesRepository.findById(leagueUser.leagueId.toValue())
+
+      if (!league) {
+        return
+      }
+      
+      otherLeagues.push(league)
+    })
+
+    return success({ myLeagues: leagues, otherLeagues })
   }
 }

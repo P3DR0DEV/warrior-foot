@@ -2,4 +2,6 @@ import type { LeagueUsers } from '#domain/warrior-foot/enterprise/entities/leagu
 
 export interface LeagueUsersRepository {
   create(leagueUser: LeagueUsers): Promise<void>
+
+  findByUserId(userId: string): Promise<LeagueUsers[]>
 }
