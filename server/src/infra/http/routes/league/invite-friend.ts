@@ -59,9 +59,9 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
         throw new errors[name](message)
       }
 
-      const { leagues } = league.value
+      const { myLeagues } = league.value
 
-      const response = await inviteFriendsUseCase.execute({ leagueId: leagues[0].id.toString(), email, inviter, name })
+      const response = await inviteFriendsUseCase.execute({ leagueId: myLeagues[0].id.toString(), email, inviter, name })
 
       if (response.isFailure()) {
         const { name, message } = response.reason
@@ -79,11 +79,11 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
         name,
         email,
         inviter,
-        code: leagues[0].code,
+        code: myLeagues[0].code,
         created_at: new Date().toISOString(),
       }
 
-      await CacheRepository.set(`invite:${leagues[0].code}`, JSON.stringify(inviteData), CACHE_EXPIRE)
+      await CacheRepository.set(`invite:${myLeagues[0].code}`, JSON.stringify(inviteData), CACHE_EXPIRE)
 
       return reply.status(201).send({ message })
     },

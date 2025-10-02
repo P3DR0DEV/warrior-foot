@@ -33,15 +33,12 @@ export class GetLeaguesByUserUseCase {
 
     const otherLeagues: League[] = []
 
-    leagueUsers.forEach(async leagueUser => {
+    for (const leagueUser of leagueUsers) {
       const league = await this.leaguesRepository.findById(leagueUser.leagueId.toValue())
-
-      if (!league) {
-        return
+      if (league) {
+        otherLeagues.push(league)
       }
-      
-      otherLeagues.push(league)
-    })
+    }
 
     return success({ myLeagues: leagues, otherLeagues })
   }
