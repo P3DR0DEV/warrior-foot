@@ -7,7 +7,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: docker
-      POSTGRES_DB: warrior-foot
+      POSTGRES_DB: warrior_foot
       PGDATA: /data/postgres
     volumes:
       - ./data/pg:/data/postgres
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql

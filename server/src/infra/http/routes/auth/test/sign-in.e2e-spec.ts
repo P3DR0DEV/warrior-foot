@@ -1,6 +1,6 @@
 import supertest from 'supertest'
-import { app } from '#infra/http/app.ts'
-import { prisma } from '#infra/lib/prisma.ts'
+import { app } from '#infra/http/app-test.ts'
+import { db } from '#infra/lib/drizzle.ts'
 import { UserFactory } from '#test/factories/make-user.ts'
 
 describe('Sign In E2E', () => {
@@ -13,7 +13,7 @@ describe('Sign In E2E', () => {
   })
 
   it('should sign in a user', async () => {
-    const userFactory = new UserFactory(prisma)
+    const userFactory = new UserFactory(db)
     await userFactory.createUser({
       email: 'pedro@mendes.com',
       password: '123456',

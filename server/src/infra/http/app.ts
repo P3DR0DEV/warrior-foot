@@ -11,7 +11,7 @@ import { leagueRoutes } from './routes/league/index.ts'
 import { userRoutes } from './routes/user/index.ts'
 
 const app = fastify({
-  logger: {
+  logger: env.NODE_ENV === 'development' || env.NODE_ENV === 'test' ? undefined : {
     transport: {
       target: 'pino-pretty',
       options: {

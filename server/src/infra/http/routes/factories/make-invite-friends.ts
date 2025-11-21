@@ -1,9 +1,9 @@
-import { InviteFriendsUseCase } from "#domain/warrior-foot/application/use-cases/league/invite-friends.ts";
-import { PrismaLeaguesRepository } from "#infra/database/prisma/repositories/prisma-leagues-repository.ts";
-import { NodemailerRepository } from "#infra/lib/nodemailer.ts";
-import { prisma } from "#infra/lib/prisma.ts";
+import { InviteFriendsUseCase } from '#domain/warrior-foot/application/use-cases/league/invite-friends.ts'
+import { DrizzleLeaguesRepository } from '#infra/database/drizzle/repositories/drizzle-leagues-repository.ts'
+import { db } from '#infra/lib/drizzle.ts'
+import { NodemailerRepository } from '#infra/lib/nodemailer.ts'
 
-const leaguesRepository = new PrismaLeaguesRepository(prisma)
+const leaguesRepository = new DrizzleLeaguesRepository(db)
 const mailRepository = new NodemailerRepository()
 const inviteFriendsUseCase = new InviteFriendsUseCase(leaguesRepository, mailRepository)
 

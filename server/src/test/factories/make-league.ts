@@ -1,8 +1,9 @@
 import { faker } from '@faker-js/faker'
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 import { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
 import { League, type LeagueProps } from '#domain/warrior-foot/enterprise/entities/league.ts'
-import { PrismaLeaguesMapper } from '#infra/database/prisma/mappers/prisma-leagues-mapper.ts'
-import type { PrismaClient } from '#prisma/index.js'
+import { DrizzleLeaguesMapper } from '#infra/database/drizzle/mappers/drizzle-leagues-mapper.ts'
+import { leagues } from '#infra/database/schemas/leagues.ts'
 
 export function makeLeague(override: Partial<LeagueProps> = {}, id?: UniqueEntityId) {
   const league = League.create(
@@ -18,14 +19,12 @@ export function makeLeague(override: Partial<LeagueProps> = {}, id?: UniqueEntit
 }
 
 export class LeagueFactory {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private drizzle: NodePgDatabase) {}
 
   async createLeague(data: Partial<LeagueProps> = {}) {
     const league = makeLeague(data)
 
-    await this.prisma.league.create({
-      data: PrismaLeaguesMapper.toPersistence(league),
-    })
+    await this.drizzle.insert(leagues).values(DrizzleLeaguesMapper.toPersistence(league))
 
     return league
   }
