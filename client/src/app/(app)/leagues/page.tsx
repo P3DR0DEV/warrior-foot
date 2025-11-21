@@ -15,9 +15,7 @@ export default async function Leagues() {
       <ul>
         {leagues.map((league) => (
           <li key={league.id}>
-            <Link href={`/leagues/${league.id}`}>
-              {league.name}
-            </Link>
+            <Link href={`/leagues/${league.id}`}>{league.name}</Link>
           </li>
         ))}
       </ul>

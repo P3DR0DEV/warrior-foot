@@ -1,4 +1,4 @@
-'use server'
+"use server";
 import { HTTPError } from "ky";
 import { warriorfootApi } from "../api-client";
 

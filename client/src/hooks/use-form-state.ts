@@ -16,9 +16,7 @@ export function useFormState(
 ) {
   const [isPending, startTransition] = useTransition();
 
-  const [formState, setFormState] = useState(
-    initialState ?? { success: false, message: null, validationErrors: null },
-  );
+  const [formState, setFormState] = useState(initialState ?? { success: false, message: null, validationErrors: null });
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

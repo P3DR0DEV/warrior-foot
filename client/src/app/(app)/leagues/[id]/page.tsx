@@ -1,10 +1,6 @@
 import { getLeagueById } from "@/http/leagues/get-league-by-id";
 
-export default async function League({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
+export default async function League({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   const result = await getLeagueById(id);
@@ -14,7 +10,9 @@ export default async function League({
   }
 
   const { league } = result.data;
-  return <div>
-    <pre>{JSON.stringify(league, null, 2)}</pre>
-  </div>;
+  return (
+    <div>
+      <pre>{JSON.stringify(league, null, 2)}</pre>
+    </div>
+  );
 }

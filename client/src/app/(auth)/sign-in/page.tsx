@@ -9,9 +9,7 @@ export default function SignIn() {
 
       <div className="flex flex-col m-auto min-w-2xl justify-center border border-gray-200 rounded-lg p-8 gap-4">
         <div className="space-y-2">
-          <h2 className="text-2xl">
-            Entre com suas credenciais para começar a jogar!
-          </h2>
+          <h2 className="text-2xl">Entre com suas credenciais para começar a jogar!</h2>
         </div>
 
         <SignInAuthForm />

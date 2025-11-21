@@ -33,7 +33,6 @@ export async function getLeagues(): Promise<GetLeaguesResult> {
       success: true,
       data: response,
     };
-    
   } catch (error) {
     if (error instanceof HTTPError) {
       const apiError = await error.response.json<{ message: string }>();
