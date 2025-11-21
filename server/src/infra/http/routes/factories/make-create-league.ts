@@ -1,10 +1,11 @@
 import { CreateLeagueUseCase } from '#domain/warrior-foot/application/use-cases/league/create.ts'
-import { PrismaLeaguesRepository } from '#infra/database/prisma/repositories/prisma-leagues-repository.ts'
-import { PrismaUsersRepository } from '#infra/database/prisma/repositories/prisma-users-repository.ts'
-import { prisma } from '#infra/lib/prisma.ts'
+import { DrizzleLeaguesRepository } from '#infra/database/drizzle/repositories/drizzle-leagues-repository.ts'
+import { DrizzleUsersRepository } from '#infra/database/drizzle/repositories/drizzle-users-repository.ts'
+import { db } from '#infra/lib/drizzle.ts'
 
-const usersRepository = new PrismaUsersRepository(prisma)
-const leaguesRepository = new PrismaLeaguesRepository(prisma)
+
+const usersRepository = new DrizzleUsersRepository(db)
+const leaguesRepository = new DrizzleLeaguesRepository(db)
 const createLeagueUseCase = new CreateLeagueUseCase(leaguesRepository, usersRepository)
 
 export { createLeagueUseCase }

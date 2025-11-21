@@ -1,6 +1,6 @@
 import supertest from 'supertest'
-import { app } from '#infra/http/app.ts'
-import { prisma } from '#infra/lib/prisma.ts'
+import { app } from '#infra/http/app-test.ts'
+import { db } from '#infra/lib/drizzle.ts'
 import { UserFactory } from '#test/factories/make-user.ts'
 
 describe('Test League Creation (E2E)', () => {
@@ -14,7 +14,7 @@ describe('Test League Creation (E2E)', () => {
 
   it('Should be able to create a new league', async () => {
     // create a new user
-    const userFactory = new UserFactory(prisma)
+    const userFactory = new UserFactory(db)
     const user = await userFactory.createUser()
 
     const response = await supertest(app.server).post('/leagues/').send({

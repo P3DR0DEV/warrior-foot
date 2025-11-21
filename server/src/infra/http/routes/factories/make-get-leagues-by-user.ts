@@ -1,12 +1,12 @@
 import { GetLeaguesByUserUseCase } from '#domain/warrior-foot/application/use-cases/league/get-leagues-by-user.ts'
-import { PrismaLeagueUsersRepository } from '#infra/database/prisma/repositories/prisma-league-users-repository.ts'
-import { PrismaLeaguesRepository } from '#infra/database/prisma/repositories/prisma-leagues-repository.ts'
-import { PrismaUsersRepository } from '#infra/database/prisma/repositories/prisma-users-repository.ts'
-import { prisma } from '#infra/lib/prisma.ts'
+import { DrizzleLeagueUsersRepository } from '#infra/database/drizzle/repositories/drizzle-league-users-repository.ts'
+import { DrizzleLeaguesRepository } from '#infra/database/drizzle/repositories/drizzle-leagues-repository.ts'
+import { DrizzleUsersRepository } from '#infra/database/drizzle/repositories/drizzle-users-repository.ts'
+import { db } from '#infra/lib/drizzle.ts'
 
-const leaguesRepository = new PrismaLeaguesRepository(prisma)
-const usersRepository = new PrismaUsersRepository(prisma)
-const leagueUsersRepository = new PrismaLeagueUsersRepository(prisma)
+const leaguesRepository = new DrizzleLeaguesRepository(db)
+const usersRepository = new DrizzleUsersRepository(db)
+const leagueUsersRepository = new DrizzleLeagueUsersRepository(db)
 const getLeaguesByUserUseCase = new GetLeaguesByUserUseCase(leaguesRepository, usersRepository, leagueUsersRepository)
 
 export { getLeaguesByUserUseCase }

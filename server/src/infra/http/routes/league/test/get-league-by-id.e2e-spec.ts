@@ -1,6 +1,6 @@
 import supertest from 'supertest'
-import { app } from '#infra/http/app.ts'
-import { prisma } from '#infra/lib/prisma.ts'
+import { app } from '#infra/http/app-test.ts'
+import { db } from '#infra/lib/drizzle.ts'
 import { LeagueFactory } from '#test/factories/make-league.ts'
 import { UserFactory } from '#test/factories/make-user.ts'
 
@@ -14,10 +14,10 @@ describe('Test Get League By Id (E2E)', () => {
   })
 
   it('should return a league', async () => {
-    const userFactory = new UserFactory(prisma)
+    const userFactory = new UserFactory(db)
     const user = await userFactory.createUser()
 
-    const leagueFactory = new LeagueFactory(prisma)
+    const leagueFactory = new LeagueFactory(db)
     const league = await leagueFactory.createLeague({ userId: user.id })
 
     const response = await supertest(app.server).get(`/leagues/${league.id}`)

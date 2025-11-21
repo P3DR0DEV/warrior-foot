@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { app } from '#infra/http/app.ts'
+import { app } from '#infra/http/app-test.ts'
 
 describe('Create User (E2E)', () => {
   beforeAll(async () => {
