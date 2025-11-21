@@ -21,7 +21,7 @@ function getWorker() {
 export async function setupDatabase() {
   const workerDb = getWorker()
 
-  databaseUrl = process.env.DATABASE_URL?.replace(/(\w+)$/, '$1_test')
+  databaseUrl = process.env.DATABASE_URL?.replace(/\/[^/]+$/, '/warrior_foot_test')
 
   const adminPool = new Pool({ connectionString: databaseUrl })
   const adminClient = await adminPool.connect()
