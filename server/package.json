@@ -51,7 +51,6 @@
     "#core/*": "./src/core/*",
     "#domain/*": "./src/domain/*",
     "#infra/*": "./src/infra/*",
-    "#test/*": "./src/test/*",
-    "#prisma/*": "./src/generated/prisma/*"
+    "#test/*": "./src/test/*"
   }
 }
