@@ -1,9 +1,16 @@
 import { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
 import { LeagueUsers } from '#domain/warrior-foot/enterprise/entities/league-users.ts'
-import type { Prisma, LeagueUsers as PrismaLeagueUsers } from '#prisma/index.d.ts'
 
-export class PrismaLeagueUsersMapper {
-  static toDomain(raw: PrismaLeagueUsers): LeagueUsers {
+type RawValue = {
+  id: string
+  leagueId: string
+  userId: string
+  role: 'guest' | 'owner'
+  createdAt: Date
+}
+
+export class DrizzleLeagueUsersMapper {
+  static toDomain(raw: RawValue): LeagueUsers {
     return LeagueUsers.create(
       {
         leagueId: new UniqueEntityId(raw.leagueId),
@@ -15,7 +22,7 @@ export class PrismaLeagueUsersMapper {
     )
   }
 
-  static toPersistence(leagueUsers: LeagueUsers): Prisma.LeagueUsersUncheckedCreateInput {
+  static toPersistence(leagueUsers: LeagueUsers){
     return {
       id: leagueUsers.id.toValue(),
       leagueId: leagueUsers.leagueId.toValue(),
