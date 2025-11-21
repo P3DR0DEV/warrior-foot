@@ -1,6 +1,5 @@
 import request from 'supertest'
-
-import { app } from './app.ts'
+import { app } from './app-test.ts'
 
 describe('Test Running Server', () => {
   test('(E2E) should return a 200 status code', async () => {
