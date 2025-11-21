@@ -1,42 +1,70 @@
-import { PrismaClient } from '#prisma/index.js'
 import 'dotenv/config'
-import { execSync } from 'node:child_process'
-import { randomUUID } from 'node:crypto'
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { migrate } from 'drizzle-orm/node-postgres/migrator'
+import { Pool } from 'pg'
 
-function generateDatabaseUrl(schemaId: string) {
-  if (!process.env.DATABASE_URL) {
-    throw new Error('Please set DATABASE_URL env variable')
-  }
-  const url = new URL(process.env.DATABASE_URL)
-  url.searchParams.set('schema', schemaId)
-  return url.toString()
+let pool: Pool
+let databaseForTest: ReturnType<typeof drizzle>
+let databaseUrl: string | undefined
+
+// Vitest entende que o SQL para fechar conexões é um erro não tratado e para não sujar mt o console foi adicionado o bloco abaixo
+process.on('uncaughtException', (error) => {
+  if (error.message.includes('terminating connection due to administrator command')) return
+  throw error
+})
+
+function getWorker() {
+  const workerId = process.env.VITEST_WORKER_ID ?? '1'
+  return `test_${workerId}`
 }
 
-const schemaId = randomUUID()
-const databaseUrl = generateDatabaseUrl(schemaId)
+export async function setupDatabase() {
+  const workerDb = getWorker()
 
-// Cria um cliente temporário para limpar o schema
-const tempPrisma = new PrismaClient({
-  datasourceUrl: process.env.DATABASE_URL,
-})
+  databaseUrl = process.env.DATABASE_URL?.replace(/(\w+)$/, '$1_test')
 
-// Limpa o schema antes de configurar os testes
-await tempPrisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`)
-await tempPrisma.$executeRawUnsafe(`CREATE SCHEMA "${schemaId}"`)
-await tempPrisma.$disconnect()
+  const adminPool = new Pool({ connectionString: databaseUrl })
+  const adminClient = await adminPool.connect()
 
-// Agora configura a URL do banco para o schema limpo
-process.env.DATABASE_URL = databaseUrl
+  await adminClient.query(`DROP DATABASE IF EXISTS ${workerDb};`)
+  await adminClient.query(`CREATE DATABASE ${workerDb};`)
+  adminClient.release()
+  await adminPool.end()
 
-// Aplica as migrações no schema limpo
-execSync('pnpx prisma db push', { stdio: 'inherit' })
+  process.env.DATABASE_URL = process.env.DATABASE_URL?.replace(/\/[^/]+$/, `/${workerDb}`)
 
-// Cliente final para os testes
-const prisma = new PrismaClient({
-  datasourceUrl: databaseUrl,
-})
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  })
 
-afterAll(async () => {
-  await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`)
-  await prisma.$disconnect()
-})
+  databaseForTest = drizzle(pool)
+  await migrate(databaseForTest, { migrationsFolder: './drizzle' })
+
+  return { databaseForTest }
+}
+
+export async function cleanupDatabase() {
+  const workerDb = getWorker()
+
+  if (pool) {
+    await pool.end()
+  }
+
+  const adminPool = new Pool({ connectionString: databaseUrl })
+  const adminClient = await adminPool.connect()
+
+  try {
+    await adminClient.query(
+      `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${workerDb}' AND pid <> pg_backend_pid();`,
+    )
+
+    await adminClient.query(`DROP DATABASE IF EXISTS "${workerDb}";`)
+  } catch (error) {
+    console.error(`Falha ao remover o banco de dados de teste "${workerDb}":`, error)
+  } finally {
+    adminClient.release()
+    await adminPool.end()
+  }
+}
+
+export { databaseForTest }
