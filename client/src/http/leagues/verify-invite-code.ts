@@ -1,20 +1,20 @@
 "use server";
 
 import { HTTPError } from "ky";
-import { cookies } from "next/headers";
 import { warriorfootApi } from "../api-client";
 
-interface GetLeaguesResponse {
-  id: string;
-  name: string;
-  code: string;
-  userId: string;
+interface VerifyInviteCodeResponse {
+  name: string
+  email: string
+  inviter: string
+  code: string
+  created_at: Date
 }
 
-type GetLeaguesResult =
+type VerifyInviteCodeResult =
   | {
       success: true;
-      data: { leagues: GetLeaguesResponse[] };
+      data: { data: VerifyInviteCodeResponse };
     }
   | {
       success: false;
@@ -22,12 +22,9 @@ type GetLeaguesResult =
       validationErrors: null;
     };
 
-export async function getLeagues(): Promise<GetLeaguesResult> {
+export async function verifyInviteCode(code: string): Promise<VerifyInviteCodeResult> {
   try {
-    const cookieStore = await cookies();
-    const userId = cookieStore.get("userId")?.value;
-
-    const response = await warriorfootApi.get(`leagues/${userId}/leagues`).json<{ leagues: GetLeaguesResponse[] }>();
+    const response = await warriorfootApi.get(`leagues/verify/${code}`).json<{ data: VerifyInviteCodeResponse }>();
 
     return {
       success: true,

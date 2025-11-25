@@ -13,11 +13,7 @@ export const CacheRepository = {
    * @param {number} ex - (optional) the expiration time for the cache entry in seconds. Defaults to 1 day.
    * @return {Promise<void>} a Promise that resolves when the key-value pair is set in the cache
    */
-  async set(
-    key: string,
-    value: string,
-    ex: number = CACHE_EXPIRE,
-  ): Promise<void> {
+  async set(key: string, value: string, ex: number = CACHE_EXPIRE): Promise<void> {
     await cache.set(key, value, {
       ex,
     });

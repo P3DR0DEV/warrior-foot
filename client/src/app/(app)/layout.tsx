@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { CacheRepository } from "@/infra/cache/redis-cache-repository";
 import { Navbar } from "./_components/navbar";
 
-export default async function AuthRequiredLayout({children}:{children:React.ReactNode}) {
+export default async function AuthRequiredLayout({ children }: { children: React.ReactNode }) {
   const cookie = await cookies();
 
   const token = cookie.get("token");
@@ -20,10 +20,10 @@ export default async function AuthRequiredLayout({children}:{children:React.Reac
   if (!session) {
     redirect("/sign-in");
   }
-  return(
+  return (
     <>
-      <Navbar/>
+      <Navbar />
       {children}
     </>
-  )
+  );
 }
