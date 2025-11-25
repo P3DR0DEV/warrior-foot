@@ -1,5 +1,5 @@
-import type { LeagueWithTeams } from "#domain/warrior-foot/application/use-cases/league/get-league-by-id.ts";
-import type { League } from "#domain/warrior-foot/enterprise/entities/league.ts";
+import type { LeagueWithTeams } from '#domain/warrior-foot/application/use-cases/league/get-league-by-id.ts'
+import type { League } from '#domain/warrior-foot/enterprise/entities/league.ts'
 
 export class LeaguePresenter {
   static toHTTP(league: League) {
@@ -10,7 +10,7 @@ export class LeaguePresenter {
       userId: league.userId.toString(),
     }
   }
-  
+
   static withTeams(league: LeagueWithTeams) {
     return {
       id: league.id.toString(),
@@ -25,7 +25,7 @@ export class LeaguePresenter {
           primaryColor: team.primaryColor,
           secondaryColor: team.secondaryColor,
         }
-      })
+      }),
     }
   }
 }

@@ -51,7 +51,7 @@ export const createNewLeagueRoute: FastifyPluginAsyncZod = async (app) => {
     },
     async (request, reply) => {
       await request.getCurrentUser()
-      
+
       const { name, userId } = request.body
 
       const response = await createLeagueUseCase.execute({

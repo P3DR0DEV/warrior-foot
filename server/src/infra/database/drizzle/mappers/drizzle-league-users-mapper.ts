@@ -22,7 +22,7 @@ export class DrizzleLeagueUsersMapper {
     )
   }
 
-  static toPersistence(leagueUsers: LeagueUsers){
+  static toPersistence(leagueUsers: LeagueUsers) {
     return {
       id: leagueUsers.id.toValue(),
       leagueId: leagueUsers.leagueId.toValue(),

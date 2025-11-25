@@ -15,16 +15,17 @@ export class DrizzleTeamsMapper {
   static toDomain(raw: RawValue): Team {
     const leagueId = new UniqueEntityId(raw.leagueId)
 
-    return Team.create({
-      name: raw.name,
-      primaryColor: raw.primaryColor,
-      secondaryColor: raw.secondaryColor,
-      division: raw.division,
-      leagueId,
-      createdAt: raw.createdAt,
-    },
-    new UniqueEntityId(raw.id),
-  )
+    return Team.create(
+      {
+        name: raw.name,
+        primaryColor: raw.primaryColor,
+        secondaryColor: raw.secondaryColor,
+        division: raw.division,
+        leagueId,
+        createdAt: raw.createdAt,
+      },
+      new UniqueEntityId(raw.id),
+    )
   }
 
   static toPersistence(team: Team) {

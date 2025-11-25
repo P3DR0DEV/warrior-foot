@@ -38,6 +38,6 @@ export class AuthenticateUserUseCase {
 
     return success({
       user: UserPresenter.toHTTP(user),
-     })
+    })
   }
 }

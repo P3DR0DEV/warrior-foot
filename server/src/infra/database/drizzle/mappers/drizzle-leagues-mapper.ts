@@ -12,16 +12,17 @@ type RawValue = {
 
 export class DrizzleLeaguesMapper {
   static toDomain(raw: RawValue): League {
-    const code = Code.create(raw.code) 
+    const code = Code.create(raw.code)
 
-    return League.create({
-      name: raw.name,
-      code,
-      userId: new UniqueEntityId(raw.userId),
-      createdAt: raw.createdAt,
-    },
-    new UniqueEntityId(raw.id),
-  )
+    return League.create(
+      {
+        name: raw.name,
+        code,
+        userId: new UniqueEntityId(raw.userId),
+        createdAt: raw.createdAt,
+      },
+      new UniqueEntityId(raw.id),
+    )
   }
 
   static toPersistence(league: League) {

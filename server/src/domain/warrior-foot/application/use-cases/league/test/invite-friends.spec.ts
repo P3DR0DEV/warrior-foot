@@ -1,10 +1,10 @@
-import { UniqueEntityId } from "#core/entities/unique-entity-id.ts"
-import { NodemailerRepository } from "#infra/lib/nodemailer.ts"
-import { makeLeague } from "#test/factories/make-league.ts"
-import { makeUser } from "#test/factories/make-user.ts"
-import { InMemoryLeaguesRepository } from "#test/repositories/in-memo-leagues-repository.ts"
-import { InMemoryUsersRepository } from "#test/repositories/in-memo-users-repository.ts"
-import { InviteFriendsUseCase } from "../invite-friends.ts"
+import { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
+import { NodemailerRepository } from '#infra/lib/nodemailer.ts'
+import { makeLeague } from '#test/factories/make-league.ts'
+import { makeUser } from '#test/factories/make-user.ts'
+import { InMemoryLeaguesRepository } from '#test/repositories/in-memo-leagues-repository.ts'
+import { InMemoryUsersRepository } from '#test/repositories/in-memo-users-repository.ts'
+import { InviteFriendsUseCase } from '../invite-friends.ts'
 
 let leaguesRepository: InMemoryLeaguesRepository
 let emailProvider: NodemailerRepository

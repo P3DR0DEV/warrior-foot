@@ -12,8 +12,7 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
       schema: {
         tags: ['User'],
         summary: 'Create a new user',
-        description:
-          'This route creates a new user, when the user is created it will generate a League for the user.',
+        description: 'This route creates a new user, when the user is created it will generate a League for the user.',
         body: z.object({
           name: z.string(),
           email: z.email(),
@@ -68,7 +67,7 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
       const { user } = response.value
 
       const createLeagueResponse = await createLeagueUseCase.execute({
-        name: "New League",
+        name: 'New League',
         userId: user.id.toString(),
       })
 

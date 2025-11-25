@@ -44,7 +44,11 @@ export class CreateLeagueUsersUseCase {
       return failure(ResourceNotFound('The league referenced was not found'))
     }
 
-    const leagueUser = LeagueUsers.create({ leagueId: new UniqueEntityId(leagueId), userId: new UniqueEntityId(userId), role })
+    const leagueUser = LeagueUsers.create({
+      leagueId: new UniqueEntityId(leagueId),
+      userId: new UniqueEntityId(userId),
+      role,
+    })
 
     await this.repository.create(leagueUser)
 

@@ -76,7 +76,12 @@ export const getLeaguesByUserRoute: FastifyPluginAsyncZod = async (app) => {
 
       const { myLeagues, otherLeagues } = response.value
 
-      return reply.status(200).send({ leagues: myLeagues.map(LeaguePresenter.toHTTP), otherLeagues: otherLeagues.map(LeaguePresenter.toHTTP) })
+      return reply
+        .status(200)
+        .send({
+          leagues: myLeagues.map(LeaguePresenter.toHTTP),
+          otherLeagues: otherLeagues.map(LeaguePresenter.toHTTP),
+        })
     },
   )
 }

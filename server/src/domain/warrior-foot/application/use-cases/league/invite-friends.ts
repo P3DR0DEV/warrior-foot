@@ -30,7 +30,7 @@ export class InviteFriendsUseCase {
 
     const { code } = league
 
-    try {      
+    try {
       await this.emailProvider.sendEmail({ email, name, inviter, code })
     } catch (error) {
       return failure(new Error('Error sending email', { cause: error }))

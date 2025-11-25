@@ -5,7 +5,6 @@ import type { Team } from '#domain/warrior-foot/enterprise/entities/team.ts'
 import { teams } from '#infra/database/schemas/teams.ts'
 import { DrizzleTeamsMapper } from '../mappers/drizzle-teams-mapper.ts'
 
-
 export class DrizzleTeamsRepository implements TeamsRepository {
   private drizzle: NodePgDatabase
 

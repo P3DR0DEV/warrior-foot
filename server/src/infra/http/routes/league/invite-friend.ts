@@ -6,7 +6,7 @@ import { CacheRepository } from '#infra/lib/redis.ts'
 import { getLeaguesByUserUseCase } from '../factories/make-get-leagues-by-user.ts'
 import { inviteFriendsUseCase } from '../factories/make-invite-friends.ts'
 
-const CACHE_EXPIRE = 72 * 60 * 60; // 72 hours
+const CACHE_EXPIRE = 72 * 60 * 60 // 72 hours
 
 export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).post(
@@ -61,7 +61,12 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
 
       const { myLeagues } = league.value
 
-      const response = await inviteFriendsUseCase.execute({ leagueId: myLeagues[0].id.toString(), email, inviter, name })
+      const response = await inviteFriendsUseCase.execute({
+        leagueId: myLeagues[0].id.toString(),
+        email,
+        inviter,
+        name,
+      })
 
       if (response.isFailure()) {
         const { name, message } = response.reason

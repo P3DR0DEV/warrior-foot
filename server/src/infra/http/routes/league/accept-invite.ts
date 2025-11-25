@@ -42,7 +42,7 @@ export const acceptInviteRoute: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const { code } = request.params
 
-      const inviteData = await CacheRepository.get(`invite:${code}`) as {
+      const inviteData = (await CacheRepository.get(`invite:${code}`)) as {
         name: string
         email: string
         inviter: string
@@ -55,10 +55,10 @@ export const acceptInviteRoute: FastifyPluginAsyncZod = async (app) => {
       }
 
       const { userId } = request.body
-      
-       await acceptInviteUseCase(code, userId)
 
-       await CacheRepository.delete(`invite:${code}`)
+      await acceptInviteUseCase(code, userId)
+
+      await CacheRepository.delete(`invite:${code}`)
 
       return reply.status(200).send({ message: 'Invite accepted successfully' })
     },

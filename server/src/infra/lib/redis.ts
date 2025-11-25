@@ -6,7 +6,7 @@ export const redis = new Redis({
   token: env.UPSTASH_REDIS_REST_TOKEN,
 })
 
-const CACHE_EXPIRE = 60 * 1 * 1440; // 1 day
+const CACHE_EXPIRE = 60 * 1 * 1440 // 1 day
 
 export const CacheRepository = {
   /**
@@ -17,21 +17,17 @@ export const CacheRepository = {
    * @param {number} ex - (optional) the expiration time for the cache entry in seconds. Defaults to 1 day.
    * @return {Promise<void>} a Promise that resolves when the key-value pair is set in the cache
    */
-  async set(
-    key: string,
-    value: string,
-    ex: number = CACHE_EXPIRE,
-  ): Promise<void> {
+  async set(key: string, value: string, ex: number = CACHE_EXPIRE): Promise<void> {
     await redis.set(key, value, {
       ex,
-    });
+    })
   },
 
   async get<T = string>(key: string): Promise<T | null> {
-    return await redis.get<T>(key);
+    return await redis.get<T>(key)
   },
 
   async delete(key: string): Promise<void> {
-    await redis.del(key);
+    await redis.del(key)
   },
-};
+}

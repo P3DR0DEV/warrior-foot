@@ -5,7 +5,7 @@ import { InMemoryTeamsRepository } from '#test/repositories/in-memo-teams-reposi
 import { InMemoryUsersRepository } from '#test/repositories/in-memo-users-repository.ts'
 import { GetLeagueByIdUseCase } from '../get-league-by-id.ts'
 
-let usersRepository:InMemoryUsersRepository
+let usersRepository: InMemoryUsersRepository
 let leaguesRepository: InMemoryLeaguesRepository
 let teamsRepository: InMemoryTeamsRepository
 let sut: GetLeagueByIdUseCase

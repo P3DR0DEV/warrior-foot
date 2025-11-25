@@ -1,4 +1,4 @@
-import { Code } from "./code"
+import { Code } from './code'
 
 describe('Code value object', () => {
   it('should create a code', () => {

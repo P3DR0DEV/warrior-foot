@@ -1,6 +1,6 @@
-import { makeUser } from "#test/factories/make-user.ts"
-import { InMemoryUsersRepository } from "#test/repositories/in-memo-users-repository.ts"
-import { AuthenticateUserUseCase } from "../authenticate.ts"
+import { makeUser } from '#test/factories/make-user.ts'
+import { InMemoryUsersRepository } from '#test/repositories/in-memo-users-repository.ts'
+import { AuthenticateUserUseCase } from '../authenticate.ts'
 
 let usersRepository: InMemoryUsersRepository
 let sut: AuthenticateUserUseCase

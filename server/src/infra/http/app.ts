@@ -11,15 +11,18 @@ import { leagueRoutes } from './routes/league/index.ts'
 import { userRoutes } from './routes/user/index.ts'
 
 const app = fastify({
-  logger: env.NODE_ENV === 'development' || env.NODE_ENV === 'test' ? undefined : {
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        translateTime: 'SYS:h:MM:ss TT Z',
-        ignore: 'pid,hostname',
-      },
-    },
-  },
+  logger:
+    env.NODE_ENV === 'development' || env.NODE_ENV === 'test'
+      ? undefined
+      : {
+          transport: {
+            target: 'pino-pretty',
+            options: {
+              translateTime: 'SYS:h:MM:ss TT Z',
+              ignore: 'pid,hostname',
+            },
+          },
+        },
 }).withTypeProvider<ZodTypeProvider>()
 
 app.setSerializerCompiler(serializerCompiler)

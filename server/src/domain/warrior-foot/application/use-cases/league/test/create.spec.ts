@@ -1,8 +1,8 @@
-import { UniqueEntityId } from "#core/entities/unique-entity-id.ts"
-import { makeUser } from "#test/factories/make-user.ts"
-import  { InMemoryLeaguesRepository } from "#test/repositories/in-memo-leagues-repository.ts"
-import  { InMemoryUsersRepository } from "#test/repositories/in-memo-users-repository.ts"
-import  { CreateLeagueUseCase } from "../create.ts"
+import { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
+import { makeUser } from '#test/factories/make-user.ts'
+import { InMemoryLeaguesRepository } from '#test/repositories/in-memo-leagues-repository.ts'
+import { InMemoryUsersRepository } from '#test/repositories/in-memo-users-repository.ts'
+import { CreateLeagueUseCase } from '../create.ts'
 
 let usersRepository: InMemoryUsersRepository
 let leaguesRepository: InMemoryLeaguesRepository
@@ -49,5 +49,5 @@ describe('Create League Use Case', () => {
       expect(name).toBe('ResourceNotFoundError')
       expect(message).toBe('The user referenced by the league was not found')
     }
-  })  
+  })
 })

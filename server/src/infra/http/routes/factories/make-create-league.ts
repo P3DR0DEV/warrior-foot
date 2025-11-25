@@ -3,7 +3,6 @@ import { DrizzleLeaguesRepository } from '#infra/database/drizzle/repositories/d
 import { DrizzleUsersRepository } from '#infra/database/drizzle/repositories/drizzle-users-repository.ts'
 import { db } from '#infra/lib/drizzle.ts'
 
-
 const usersRepository = new DrizzleUsersRepository(db)
 const leaguesRepository = new DrizzleLeaguesRepository(db)
 const createLeagueUseCase = new CreateLeagueUseCase(leaguesRepository, usersRepository)

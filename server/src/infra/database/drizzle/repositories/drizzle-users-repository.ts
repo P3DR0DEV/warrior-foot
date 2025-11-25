@@ -34,7 +34,6 @@ export class DrizzleUsersRepository implements UsersRepository {
     const user = response[0]
 
     return DrizzleUsersMapper.toDomain(user)
-
   }
 
   async create(user: User): Promise<void> {

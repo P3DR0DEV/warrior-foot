@@ -64,7 +64,7 @@ export const signInRoute: FastifyPluginAsyncZod = async (app) => {
         },
       )
 
-      return reply.status(200).send({token})
+      return reply.status(200).send({ token })
     },
   )
 }

@@ -9,14 +9,18 @@ interface GetLeaguesByUserRequest {
   userId: string
 }
 
-type GetLeaguesByUserResponse = Either<ResourceNotFoundError, { myLeagues: League[], otherLeagues: League[] }>
+type GetLeaguesByUserResponse = Either<ResourceNotFoundError, { myLeagues: League[]; otherLeagues: League[] }>
 
 export class GetLeaguesByUserUseCase {
   private readonly leaguesRepository: LeaguesRepository
   private readonly usersRepository: UsersRepository
   private readonly leagueUsersRepository: LeagueUsersRepository
 
-  constructor(leaguesRepository: LeaguesRepository, usersRepository: UsersRepository, leagueUsersRepository: LeagueUsersRepository) {
+  constructor(
+    leaguesRepository: LeaguesRepository,
+    usersRepository: UsersRepository,
+    leagueUsersRepository: LeagueUsersRepository,
+  ) {
     this.leaguesRepository = leaguesRepository
     this.usersRepository = usersRepository
     this.leagueUsersRepository = leagueUsersRepository
@@ -29,7 +33,10 @@ export class GetLeaguesByUserUseCase {
       return failure(ResourceNotFound('The user referenced by the league was not found'))
     }
 
-    const [leagues, leagueUsers] = await Promise.all([this.leaguesRepository.findByUserId(userId), this.leagueUsersRepository.findByUserId(userId)])
+    const [leagues, leagueUsers] = await Promise.all([
+      this.leaguesRepository.findByUserId(userId),
+      this.leagueUsersRepository.findByUserId(userId),
+    ])
 
     const otherLeagues: League[] = []
 

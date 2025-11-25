@@ -1,6 +1,6 @@
-import { makeUser } from "#test/factories/make-user.ts"
-import { InMemoryUsersRepository } from "#test/repositories/in-memo-users-repository.ts"
-import { GetUserByEmailUseCase } from "../get-user-by-email.ts"
+import { makeUser } from '#test/factories/make-user.ts'
+import { InMemoryUsersRepository } from '#test/repositories/in-memo-users-repository.ts'
+import { GetUserByEmailUseCase } from '../get-user-by-email.ts'
 
 let usersRepository = new InMemoryUsersRepository()
 let sut = new GetUserByEmailUseCase(usersRepository)

@@ -23,7 +23,7 @@ export const verifyInviteRoute: FastifyPluginAsyncZod = async (app) => {
                 inviter: z.string(),
                 code: z.string(),
                 created_at: z.coerce.date(),
-              })
+              }),
             })
             .describe('Valid invite code'),
           400: z
@@ -44,7 +44,13 @@ export const verifyInviteRoute: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const { code } = request.params
 
-      const inviteData = await CacheRepository.get(`invite:${code}`) as { name: string, email: string, inviter: string, code: string, created_at: string } | null
+      const inviteData = (await CacheRepository.get(`invite:${code}`)) as {
+        name: string
+        email: string
+        inviter: string
+        code: string
+        created_at: string
+      } | null
 
       if (!inviteData) {
         throw new errors.ResourceNotFoundError('Invalid invite code')

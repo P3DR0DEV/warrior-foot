@@ -11,7 +11,17 @@ export const transporter = createTransport({
 })
 
 export class NodemailerRepository implements EmailProviderRepository {
-  async sendEmail({name, email, inviter, code}: { name: string, email: string, inviter: string, code: string }): Promise<{ message: string }> {
+  async sendEmail({
+    name,
+    email,
+    inviter,
+    code,
+  }: {
+    name: string
+    email: string
+    inviter: string
+    code: string
+  }): Promise<{ message: string }> {
     const info = await transporter.sendMail({
       from: `Warrior Foot <${env.EMAIL_USER}>`,
       to: email,
@@ -28,6 +38,6 @@ export class NodemailerRepository implements EmailProviderRepository {
       throw new Error(info.rejected[0].toString())
     }
 
-    return {message: info.messageId}
+    return { message: info.messageId }
   }
 }

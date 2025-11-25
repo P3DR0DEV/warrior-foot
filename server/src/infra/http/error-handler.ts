@@ -1,12 +1,17 @@
 import type { FastifyInstance } from 'fastify'
 import { ZodError } from 'zod'
-import { AlreadyRegisteredEmailError, InvalidCredentialsError, ResourceNotFoundError, UnauthorizedError } from './util/errors.ts'
+import {
+  AlreadyRegisteredEmailError,
+  InvalidCredentialsError,
+  ResourceNotFoundError,
+  UnauthorizedError,
+} from './util/errors.ts'
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 
 export const errorHandler: FastifyErrorHandler = (error, _request, reply) => {
   console.error({ error })
-  
+
   if (error instanceof ZodError) {
     return reply.status(400).send({
       name: error.name,
@@ -51,4 +56,3 @@ export const errorHandler: FastifyErrorHandler = (error, _request, reply) => {
     message: 'Internal Server Error',
   })
 }
-
