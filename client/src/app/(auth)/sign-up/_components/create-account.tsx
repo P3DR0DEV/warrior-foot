@@ -15,7 +15,7 @@ export function CreateAccount() {
   const [formState, handleSubmit, isPending] = useFormState(createAccountAction, onSuccess);
 
   function onSuccess() {
-    toast.success("Autenticado com sucesso!");
+    toast.success("Conta criada com sucesso!");
     router.push("/sign-in");
   }
 
