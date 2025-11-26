@@ -14,7 +14,7 @@ interface GetLeaguesResponse {
 type GetLeaguesResult =
   | {
       success: true;
-      data: { leagues: GetLeaguesResponse[] };
+      data: { leagues: GetLeaguesResponse[]; otherLeagues: GetLeaguesResponse[] };
     }
   | {
       success: false;
@@ -27,7 +27,9 @@ export async function getLeagues(): Promise<GetLeaguesResult> {
     const cookieStore = await cookies();
     const userId = cookieStore.get("userId")?.value;
 
-    const response = await warriorfootApi.get(`leagues/${userId}/leagues`).json<{ leagues: GetLeaguesResponse[] }>();
+    const response = await warriorfootApi
+      .get(`leagues/${userId}/leagues`)
+      .json<{ leagues: GetLeaguesResponse[]; otherLeagues: GetLeaguesResponse[] }>();
 
     return {
       success: true,

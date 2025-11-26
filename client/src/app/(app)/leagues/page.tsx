@@ -8,12 +8,21 @@ export default async function Leagues() {
     return <p>Ocorreu um erro: {result.message}</p>;
   }
 
-  const { leagues } = result.data;
+  const { leagues, otherLeagues } = result.data;
 
   return (
     <div>
       <ul>
         {leagues.map((league) => (
+          <li key={league.id}>
+            <Link href={`/leagues/${league.id}`}>{league.name}</Link>
+          </li>
+        ))}
+      </ul>
+
+      <h2 className="text-2xl mt-2">Outras ligas:</h2>
+      <ul>
+        {otherLeagues.map((league) => (
           <li key={league.id}>
             <Link href={`/leagues/${league.id}`}>{league.name}</Link>
           </li>
