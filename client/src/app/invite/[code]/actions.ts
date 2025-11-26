@@ -7,17 +7,17 @@ import { CacheRepository } from "@/infra/cache/redis-cache-repository";
 
 type VerifyIfUserIsLoggedInResult =
   | {
-    isLoggedIn: true;
-    user: {
-      id: string;
-      name: string;
-      email: string;
-    };
-  }
+      isLoggedIn: true;
+      user: {
+        id: string;
+        name: string;
+        email: string;
+      };
+    }
   | {
-    isLoggedIn: false;
-    user: null;
-  };
+      isLoggedIn: false;
+      user: null;
+    };
 
 export async function verifyIfUserIsLoggedIn(): Promise<VerifyIfUserIsLoggedInResult> {
   const cookie = await cookies();

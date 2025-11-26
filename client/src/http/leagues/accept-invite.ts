@@ -9,14 +9,14 @@ interface AcceptInviteResponse {
 
 type AcceptInviteResult =
   | {
-    success: true;
-    data: { league: AcceptInviteResponse };
-  }
+      success: true;
+      data: { league: AcceptInviteResponse };
+    }
   | {
-    success: false;
-    message: string;
-    validationErrors: null;
-  };
+      success: false;
+      message: string;
+      validationErrors: null;
+    };
 
 interface AcceptInviteProps {
   code: string;
@@ -25,9 +25,11 @@ interface AcceptInviteProps {
 
 export async function acceptInvite({ code, userId }: AcceptInviteProps): Promise<AcceptInviteResult> {
   try {
-    const response = await warriorfootApi.patch(`leagues/invite/${code}/accept`, {
-      json: { userId },
-    }).json<{ league: AcceptInviteResponse }>();
+    const response = await warriorfootApi
+      .patch(`leagues/invite/${code}/accept`, {
+        json: { userId },
+      })
+      .json<{ league: AcceptInviteResponse }>();
 
     return {
       success: true,

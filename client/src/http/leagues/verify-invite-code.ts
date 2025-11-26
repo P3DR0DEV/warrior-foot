@@ -4,11 +4,11 @@ import { HTTPError } from "ky";
 import { warriorfootApi } from "../api-client";
 
 interface VerifyInviteCodeResponse {
-  name: string
-  email: string
-  inviter: string
-  code: string
-  created_at: Date
+  name: string;
+  email: string;
+  inviter: string;
+  code: string;
+  created_at: Date;
 }
 
 type VerifyInviteCodeResult =

@@ -13,7 +13,7 @@ export default async function AuthRequiredLayout({ children }: { children: React
     redirect("/sign-in");
   }
 
-  const decodedToken = jwtDecode<{ user: {id: string, name: string, email: string}}>(token.value);
+  const decodedToken = jwtDecode<{ user: { id: string; name: string; email: string } }>(token.value);
 
   const session = await CacheRepository.get(`user-session:${decodedToken.user.id}`);
 
