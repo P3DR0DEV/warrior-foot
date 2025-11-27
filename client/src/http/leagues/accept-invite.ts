@@ -1,20 +1,16 @@
 "use server";
 
 import { HTTPError } from "ky";
-import { cookies } from "next/headers";
 import { warriorfootApi } from "../api-client";
 
-interface GetLeaguesResponse {
-  id: string;
-  name: string;
-  code: string;
-  userId: string;
+interface AcceptInviteResponse {
+  message: string;
 }
 
-type GetLeaguesResult =
+type AcceptInviteResult =
   | {
       success: true;
-      data: { leagues: GetLeaguesResponse[]; otherLeagues: GetLeaguesResponse[] };
+      data: { league: AcceptInviteResponse };
     }
   | {
       success: false;
@@ -22,14 +18,18 @@ type GetLeaguesResult =
       validationErrors: null;
     };
 
-export async function getLeagues(): Promise<GetLeaguesResult> {
-  try {
-    const cookieStore = await cookies();
-    const userId = cookieStore.get("userId")?.value;
+interface AcceptInviteProps {
+  code: string;
+  userId: string;
+}
 
+export async function acceptInvite({ code, userId }: AcceptInviteProps): Promise<AcceptInviteResult> {
+  try {
     const response = await warriorfootApi
-      .get(`leagues/${userId}/leagues`)
-      .json<{ leagues: GetLeaguesResponse[]; otherLeagues: GetLeaguesResponse[] }>();
+      .patch(`leagues/invite/${code}/accept`, {
+        json: { userId },
+      })
+      .json<{ league: AcceptInviteResponse }>();
 
     return {
       success: true,

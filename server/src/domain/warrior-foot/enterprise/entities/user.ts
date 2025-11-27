@@ -8,6 +8,7 @@ export interface UserProps {
   password: string
   createdAt: Date
   updatedAt?: Date | null
+  invitedBy?: string | null
 }
 
 export class User extends Entity<UserProps> {
@@ -32,5 +33,9 @@ export class User extends Entity<UserProps> {
 
   get password() {
     return this.props.password
+  }
+  
+  get invitedBy() {
+    return this.props.invitedBy
   }
 }

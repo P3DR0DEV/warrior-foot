@@ -6,6 +6,7 @@ type RawValue = {
   name: string
   email: string
   password: string
+  invitedBy: string | null
   createdAt: Date
   updatedAt: Date | null
 }
@@ -17,6 +18,7 @@ export class DrizzleUsersMapper {
         name: raw.name,
         email: raw.email,
         password: raw.password,
+        invitedBy: raw.invitedBy,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },
@@ -30,6 +32,7 @@ export class DrizzleUsersMapper {
       name: user.name,
       email: user.email,
       password: user.password,
+      invitedBy: user.invitedBy,
     }
   }
 }

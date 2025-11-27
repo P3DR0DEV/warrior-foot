@@ -17,15 +17,12 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
           name: z.string(),
           email: z.email(),
           password: z.string(),
+          invitedBy: z.uuid().optional(),
         }),
         response: {
           201: z
             .object({
-              user: z.object({
-                id: z.uuid(),
-                name: z.string(),
-                email: z.string(),
-              }),
+              token: z.string(),
             })
             .describe('User created successfully'),
           400: z
@@ -50,12 +47,13 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
-      const { name, email, password } = request.body
+      const { name, email, password, invitedBy } = request.body
 
       const response = await createUserUseCase.execute({
         name,
         email,
         password,
+        invitedBy,
       })
 
       if (response.isFailure()) {
@@ -77,7 +75,18 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
         throw new errors[name](message)
       }
 
-      return reply.status(201).send({ user: UserPresenter.toHTTP(user) })
+
+      
+      const token = await reply.jwtSign(
+        {
+          user: UserPresenter.toHTTP(user),
+        },
+        {
+          expiresIn: '7d',
+        },
+      )
+
+      return reply.status(201).send({ token })
     },
   )
 }

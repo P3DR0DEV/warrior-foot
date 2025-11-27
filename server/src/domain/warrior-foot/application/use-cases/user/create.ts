@@ -8,6 +8,7 @@ interface CreateUserProps {
   name: string
   email: string
   password: string
+  invitedBy?: string
 }
 
 type CreateUserUseCaseResponse = Either<AlreadyRegisteredEmailError, { user: User }>
@@ -18,7 +19,7 @@ export class CreateUserUseCase {
     this.repository = repository
   }
 
-  async execute({ name, email, password }: CreateUserProps): Promise<CreateUserUseCaseResponse> {
+  async execute({ name, email, password, invitedBy }: CreateUserProps): Promise<CreateUserUseCaseResponse> {
     const isEmailAlreadyRegistered = await this.repository.findByEmail(email)
 
     if (isEmailAlreadyRegistered) {
@@ -27,7 +28,7 @@ export class CreateUserUseCase {
 
     const passwordHash = await HashPassword.generateHash(password)
 
-    const user = User.create({ name, email, password: passwordHash })
+    const user = User.create({ name, email, password: passwordHash, invitedBy })
 
     await this.repository.create(user)
 

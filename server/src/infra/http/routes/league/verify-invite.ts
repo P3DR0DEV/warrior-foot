@@ -20,7 +20,10 @@ export const verifyInviteRoute: FastifyPluginAsyncZod = async (app) => {
               data: z.object({
                 name: z.string(),
                 email: z.email(),
-                inviter: z.string(),
+                inviter: z.object({
+                  id: z.uuid(),
+                  name: z.string(),
+                }),
                 code: z.string(),
                 created_at: z.coerce.date(),
               }),
@@ -47,7 +50,10 @@ export const verifyInviteRoute: FastifyPluginAsyncZod = async (app) => {
       const inviteData = (await CacheRepository.get(`invite:${code}`)) as {
         name: string
         email: string
-        inviter: string
+        inviter: {
+          id: string
+          name: string
+        }
         code: string
         created_at: string
       } | null

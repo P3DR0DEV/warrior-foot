@@ -1,10 +1,13 @@
-import { Button } from "@/components/ui/button";
 import { verifyInviteCode } from "@/http/leagues/verify-invite-code";
+import { AcceptButton } from "./_components/accept-button";
+import { NavigationButtons } from "./_components/navigation-buttons";
+import { verifyIfUserIsLoggedIn } from "./actions";
 
 export default async function AcceptInvitePage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
-
   const result = await verifyInviteCode(code);
+
+  const { isLoggedIn, user } = await verifyIfUserIsLoggedIn();
 
   if (!result.success) {
     return (
@@ -29,10 +32,10 @@ export default async function AcceptInvitePage({ params }: { params: Promise<{ c
             Olá, <strong>{name}</strong>!!
           </h1>
           <p>
-            Você foi convidado por <strong>{inviter}</strong> para participar de sua liga no WarriorFoot.
+            Você foi convidado por <strong>{inviter.name}</strong> para participar de sua liga no WarriorFoot.
           </p>
           <p>Para aceitar o convite, clique no botão abaixo.</p>
-          <Button className="mt-2 self-end cursor-pointer" variant='outline'>Aceitar convite</Button>
+          {isLoggedIn ? <AcceptButton user={user} inviter={inviter} code={code} /> : <NavigationButtons code={code} inviter={inviter} />}
         </div>
       </div>
     </div>

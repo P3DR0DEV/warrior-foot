@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "@radix-ui/react-label";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -10,13 +10,19 @@ import { useFormState } from "@/hooks/use-form-state";
 import { signInAction } from "../actions";
 
 export function SignInAuthForm() {
+  const params = useSearchParams();
+  const redirect = params.get("redirect");
+
   const router = useRouter();
 
   const [formState, handleSubmit, isPending] = useFormState(signInAction, onSuccess);
 
   function onSuccess() {
     toast.success("Autenticado com sucesso!");
-    router.push("/leagues");
+    if (redirect) {
+      return router.push(redirect);
+    }
+    return router.push("/leagues");
   }
 
   useEffect(() => {
