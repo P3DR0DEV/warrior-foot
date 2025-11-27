@@ -22,11 +22,7 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
         response: {
           201: z
             .object({
-              user: z.object({
-                id: z.uuid(),
-                name: z.string(),
-                email: z.string(),
-              }),
+              token: z.string(),
             })
             .describe('User created successfully'),
           400: z
@@ -79,7 +75,18 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
         throw new errors[name](message)
       }
 
-      return reply.status(201).send({ user: UserPresenter.toHTTP(user) })
+
+      
+      const token = await reply.jwtSign(
+        {
+          user: UserPresenter.toHTTP(user),
+        },
+        {
+          expiresIn: '7d',
+        },
+      )
+
+      return reply.status(201).send({ token })
     },
   )
 }
