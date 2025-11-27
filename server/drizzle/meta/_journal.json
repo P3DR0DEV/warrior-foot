@@ -15,6 +15,13 @@
       "when": 1763755620806,
       "tag": "0001_pretty_goliath",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764246532662,
+      "tag": "0002_tranquil_sway",
+      "breakpoints": true
     }
   ]
 }

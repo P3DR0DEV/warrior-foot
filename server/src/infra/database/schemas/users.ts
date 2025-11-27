@@ -5,6 +5,7 @@ export const users = pgTable('users', {
   name: text().notNull(),
   email: text().unique().notNull(),
   password: text().notNull(),
+  invitedBy: uuid('invited_by'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').$onUpdate(() => new Date()),
 })
