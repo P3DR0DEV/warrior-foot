@@ -17,6 +17,7 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
           name: z.string(),
           email: z.email(),
           password: z.string(),
+          invitedBy: z.uuid().optional(),
         }),
         response: {
           201: z
@@ -50,12 +51,13 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
-      const { name, email, password } = request.body
+      const { name, email, password, invitedBy } = request.body
 
       const response = await createUserUseCase.execute({
         name,
         email,
         password,
+        invitedBy,
       })
 
       if (response.isFailure()) {
