@@ -32,10 +32,10 @@ export default async function AcceptInvitePage({ params }: { params: Promise<{ c
             Olá, <strong>{name}</strong>!!
           </h1>
           <p>
-            Você foi convidado por <strong>{inviter}</strong> para participar de sua liga no WarriorFoot.
+            Você foi convidado por <strong>{inviter.name}</strong> para participar de sua liga no WarriorFoot.
           </p>
           <p>Para aceitar o convite, clique no botão abaixo.</p>
-          {isLoggedIn ? <AcceptButton user={user} inviter={inviter} code={code} /> : <NavigationButtons code={code} />}
+          {isLoggedIn ? <AcceptButton user={user} inviter={inviter} code={code} /> : <NavigationButtons code={code} inviter={inviter} />}
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ interface CreateUser {
   name: string;
   email: string;
   password: string;
+  invitedBy?: string;
 }
 
 interface CreateUserResponse {

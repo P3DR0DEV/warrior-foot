@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,21 @@ import { createAccountAction } from "../actions";
 
 export function CreateAccount() {
   const router = useRouter();
+  const params = useSearchParams();
+
+  const redirect = params.get("redirect");
+  const invited = params.get("invitedBy");
 
   const [formState, handleSubmit, isPending] = useFormState(createAccountAction, onSuccess);
 
   function onSuccess() {
     toast.success("Conta criada com sucesso!");
-    router.push("/sign-in");
+
+    if (redirect) {
+      return router.push(redirect);
+    }
+
+    return router.push("/sign-in");
   }
 
   useEffect(() => {
@@ -67,6 +76,8 @@ export function CreateAccount() {
           </p>
         )}
       </div>
+
+      <input type="text" name="invitedBy" value={invited ?? undefined} readOnly hidden />
 
       <Button type="submit" variant={"outline"} className="cursor-pointer" disabled={isPending}>
         {isPending ? "Criando conta..." : "Criar conta"}

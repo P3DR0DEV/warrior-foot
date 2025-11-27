@@ -6,7 +6,10 @@ import { warriorfootApi } from "../api-client";
 interface VerifyInviteCodeResponse {
   name: string;
   email: string;
-  inviter: string;
+  inviter: {
+    id: string;
+    name: string;
+  };
   code: string;
   created_at: Date;
 }

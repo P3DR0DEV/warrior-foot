@@ -23,7 +23,10 @@ interface AcceptButtonProps {
     name: string;
     email: string;
   };
-  inviter: string;
+  inviter: {
+    id: string;
+    name: string;
+  };
   code: string;
 }
 
@@ -54,7 +57,7 @@ export function AcceptButton({ user, inviter, code }: AcceptButtonProps) {
           <DialogTitle>Aceitar convite?</DialogTitle>
           <DialogDescription>
             Ao clicar em aceitar, sua conta com <strong>email: {user.email}</strong> será associada à liga de seu amigo{" "}
-            <strong>{inviter}</strong>.
+            <strong>{inviter.name}</strong>.
           </DialogDescription>
         </DialogHeader>
 

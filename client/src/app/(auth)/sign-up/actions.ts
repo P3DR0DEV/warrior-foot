@@ -9,6 +9,7 @@ const createAccountSchema = z
     email: z.email({ message: "Email inválido" }),
     password: z.string().min(8, { message: "Senha deve ter no mínimo 8 caracteres" }),
     confirmPassword: z.string().min(8, { message: "Senha deve ter no mínimo 8 caracteres" }),
+    invitedBy: z.uuid().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas digitadas não coincidem",
@@ -28,8 +29,9 @@ export async function createAccountAction(data: FormData) {
     };
   }
 
-  const { name, email, password } = validationResult.data;
-  const result = await createUser({ name, email, password });
+  const { name, email, password, invitedBy } = validationResult.data;
+
+  const result = await createUser({ name, email, password, invitedBy });
 
   if (!result.success) {
     return {
