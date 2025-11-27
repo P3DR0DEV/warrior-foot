@@ -3,12 +3,19 @@
 import { HTTPError } from "ky";
 import { warriorfootApi } from "../api-client";
 
+interface Team {
+  name: string;
+  division: string;
+  primaryColor: string;
+  secondaryColor: string;
+}
+
 interface GetLeagueByIdResponse {
   id: string;
   name: string;
   code: string;
   userId: string;
-  teams: any[];
+  teams: Team[];
 }
 
 type GetLeaguesResult =

@@ -9,7 +9,7 @@ interface CreateUser {
 }
 
 interface CreateUserResponse {
-  token: string
+  token: string;
 }
 
 type CreateUserResult =
