@@ -19,13 +19,13 @@ export function CreateAccount() {
   const [formState, handleSubmit, isPending] = useFormState(createAccountAction, onSuccess);
 
   function onSuccess() {
-    toast.success("Conta criada com sucesso!");
+    toast.success("Autenticado com sucesso!");
 
     if (redirect) {
       return router.push(redirect);
     }
 
-    return router.push("/sign-in");
+    return router.push("/leagues");
   }
 
   useEffect(() => {

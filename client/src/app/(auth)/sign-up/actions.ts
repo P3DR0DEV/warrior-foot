@@ -1,7 +1,16 @@
 "use server";
 
+import { jwtDecode } from "jwt-decode";
+import { cookies } from "next/headers";
 import { z } from "zod";
 import { createUser } from "@/http/users/create-user";
+import { CacheRepository } from "@/infra/cache/redis-cache-repository";
+
+type UserForPayload = {
+  id: string;
+  name: string;
+  email: string;
+};
 
 const createAccountSchema = z
   .object({
@@ -40,6 +49,24 @@ export async function createAccountAction(data: FormData) {
       validationErrors: null,
     };
   }
+
+  const payload = jwtDecode<{ user: UserForPayload }>(result.data.token);
+
+  const cookie = await cookies();
+
+  cookie.set("userId", payload.user.id, {
+    path: "/",
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 30,
+  });
+
+  cookie.set("token", result.data.token, {
+    path: "/",
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 30,
+  });
+
+  await CacheRepository.set(`user-session:${payload.user.id}`, JSON.stringify(payload));
 
   return {
     success: true,
