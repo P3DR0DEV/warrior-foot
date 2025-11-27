@@ -83,7 +83,10 @@ export const inviteFriendsRoute: FastifyPluginAsyncZod = async (app) => {
       const inviteData = {
         name,
         email,
-        inviter,
+        inviter: {
+          id,
+          name: inviter,
+        },
         code: myLeagues[0].code,
         created_at: new Date().toISOString(),
       }
