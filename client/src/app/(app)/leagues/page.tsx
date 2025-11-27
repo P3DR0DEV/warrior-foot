@@ -24,16 +24,18 @@ export default async function Leagues() {
         </ul>
       </div>
 
-      <div className="w-full">
-        <h2 className="text-2xl mt-2">Outras ligas:</h2>
-        <ul>
-          {otherLeagues.map((league) => (
-            <li key={league.id} className={buttonVariants({ variant: "link" })}>
-              <Link href={`/leagues/${league.id}`}>{league.name}</Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {otherLeagues.length > 0 && (
+        <div className="w-full">
+          <h2 className="text-2xl mt-2">Outras ligas:</h2>
+          <ul>
+            {otherLeagues.map((league) => (
+              <li key={league.id} className={buttonVariants({ variant: "link" })}>
+                <Link href={`/leagues/${league.id}`}>{league.name}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

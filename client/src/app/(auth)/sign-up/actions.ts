@@ -18,7 +18,7 @@ const createAccountSchema = z
     email: z.email({ message: "Email inválido" }),
     password: z.string().min(8, { message: "Senha deve ter no mínimo 8 caracteres" }),
     confirmPassword: z.string().min(8, { message: "Senha deve ter no mínimo 8 caracteres" }),
-    invitedBy: z.uuid().optional(),
+    invitedBy: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas digitadas não coincidem",

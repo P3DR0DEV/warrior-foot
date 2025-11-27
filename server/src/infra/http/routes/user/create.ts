@@ -17,7 +17,7 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
           name: z.string(),
           email: z.email(),
           password: z.string(),
-          invitedBy: z.uuid().optional(),
+          invitedBy: z.string().optional().transform((value) => value === '' ? undefined : value),
         }),
         response: {
           201: z
