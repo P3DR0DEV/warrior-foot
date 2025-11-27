@@ -70,7 +70,7 @@ export function AcceptButton({ user, inviter, code }: AcceptButtonProps) {
             </DialogClose>
 
             <Button className="cursor-pointer" disabled={isPending}>
-              Enviar convite
+              Aceitar convite
             </Button>
           </DialogFooter>
         </form>
