@@ -4,8 +4,10 @@ import type { Optional } from "#core/types/optional.ts"
 import type { PlayerProps } from "./player.ts"
 
 export interface OutfieldProps extends PlayerProps {
+  teamId: UniqueEntityId
   position: 'outfield'
   dribble: number
+  createdAt: Date
 }
 
 export class Outfield extends Entity<OutfieldProps> {
@@ -61,5 +63,13 @@ export class Outfield extends Entity<OutfieldProps> {
 
   get longPass() {
     return this.props.longPass
+  }
+
+  get isStar() {
+    return this.props.isStar
+  }
+
+  get dribble() {
+    return this.props.dribble
   }
 }

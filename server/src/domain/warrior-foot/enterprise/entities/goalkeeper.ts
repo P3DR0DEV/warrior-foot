@@ -4,9 +4,11 @@ import type { Optional } from "#core/types/optional.ts"
 import type { PlayerProps } from "./player.ts"
 
 export interface GoalkeeperProps extends PlayerProps {
+  teamId: UniqueEntityId
   position: 'goalkeeper'
   jump: number
   reflexes: number
+  createdAt: Date
 }
 
 export class Goalkeeper extends Entity<GoalkeeperProps> {
@@ -70,5 +72,9 @@ export class Goalkeeper extends Entity<GoalkeeperProps> {
 
   get reflexes() {
     return this.props.reflexes
+  }
+
+  get isStar() {
+    return this.props.isStar
   }
 }
