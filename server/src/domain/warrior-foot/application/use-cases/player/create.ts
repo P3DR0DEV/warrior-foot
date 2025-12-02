@@ -3,24 +3,17 @@ import { ResourceNotFound, type ResourceNotFoundError } from '#core/errors/resou
 import { type Either, failure, success } from '#core/types/either.ts'
 import { Goalkeeper } from '#domain/warrior-foot/enterprise/entities/goalkeeper.ts'
 import { Outfield } from '#domain/warrior-foot/enterprise/entities/outfield.ts'
-import type { PlayerProps } from '#domain/warrior-foot/enterprise/entities/player.ts'
+
+import { getRandomValue, playerAbilityValues, rollChance } from '../../../../../util/player-ability-values.ts'
+import { starPlayerAbilityValues } from '../../../../../util/star-player-ability-values.ts'
 import type { Player, PlayersRepository } from '../../repositories/players-repository.ts'
 import type { TeamsRepository } from '../../repositories/teams-repository.ts'
 
-interface CreateGoalkeeperInput extends PlayerProps {
-  position: 'goalkeeper'
-  jump: number
-  reflexes: number
+interface CreatePlayerRequest {
+  name: string
   teamId: string
+  position: 'goalkeeper' | 'outfield'
 }
-
-interface CreateOutfieldInput extends PlayerProps {
-  position: 'outfield'
-  dribble: number
-  teamId: string
-}
-
-type CreatePlayerRequest = CreateGoalkeeperInput | CreateOutfieldInput
 
 type CreatePlayerResponse = Either<ResourceNotFoundError, { player: Player }>
 
@@ -31,48 +24,111 @@ export class CreatePlayerUseCase {
   ) { }
 
   async execute(props: CreatePlayerRequest): Promise<CreatePlayerResponse> {
-    let player: Goalkeeper | Outfield
-
     const team = await this.teamsRepository.findById(props.teamId)
 
     if (!team) {
       return failure(ResourceNotFound('The league referenced was not found'))
     }
 
-    const teamId = new UniqueEntityId(props.teamId)
-    if (props.position === 'goalkeeper') {
-      player = Goalkeeper.create({
-        position: props.position,
-        name: props.name,
-        strength: props.strength,
-        agility: props.agility,
-        energy: props.energy,
-        teamId,
-        kick: props.kick,
-        longKick: props.longKick,
-        pass: props.pass,
-        longPass: props.longPass,
-        isStar: props.isStar,
-        jump: props.jump,
-        reflexes: props.reflexes,
-      })
-    } else {
-      player = Outfield.create({
-        name: props.name,
-        strength: props.strength,
-        agility: props.agility,
-        energy: props.energy,
-        teamId,
-        kick: props.kick,
-        longKick: props.longKick,
-        pass: props.pass,
-        longPass: props.longPass,
-        isStar: props.isStar,
-        position: props.position,
-        dribble: props.dribble,
-      })
-    }
+    const division = team.division
 
+    const teamId = new UniqueEntityId(props.teamId)
+
+    // Probabilidade de ser um craque, parâmetro divisão enviado para calcular a %
+    const isStar = rollChance(division)
+
+    let player: Goalkeeper | Outfield
+    // Tentar refatorar esse bloco de código para que o código seja mais legível
+    if (props.position === 'goalkeeper') {
+      if (isStar) {
+        //GOLEIRO CRAQUE
+        const values = {
+          strength: getRandomValue(starPlayerAbilityValues[division].natural.strength),
+          agility: getRandomValue(starPlayerAbilityValues[division].natural.agility),
+          energy: getRandomValue(starPlayerAbilityValues[division].natural.energy),
+          kick: getRandomValue(starPlayerAbilityValues[division].goalkeeper.kick),
+          longKick: getRandomValue(starPlayerAbilityValues[division].goalkeeper.longKick),
+          pass: getRandomValue(starPlayerAbilityValues[division].goalkeeper.pass),
+          longPass: getRandomValue(starPlayerAbilityValues[division].goalkeeper.longPass),
+          jump: getRandomValue(starPlayerAbilityValues[division].goalkeeper.jump),
+          reflexes: getRandomValue(starPlayerAbilityValues[division].goalkeeper.reflexes),
+        }
+
+        player = Goalkeeper.create({
+          position: props.position,
+          name: props.name,
+          teamId,
+          isStar,
+          ...values,
+        })
+      } else {
+
+        //GOLEIRO NÃO CRAQUE
+        const values = {
+          strength: getRandomValue(playerAbilityValues[division].natural.strength),
+          agility: getRandomValue(playerAbilityValues[division].natural.agility),
+          energy: getRandomValue(playerAbilityValues[division].natural.energy),
+          kick: getRandomValue(playerAbilityValues[division].goalkeeper.kick),
+          longKick: getRandomValue(playerAbilityValues[division].goalkeeper.longKick),
+          pass: getRandomValue(playerAbilityValues[division].goalkeeper.pass),
+          longPass: getRandomValue(playerAbilityValues[division].goalkeeper.longPass),
+          jump: getRandomValue(playerAbilityValues[division].goalkeeper.jump),
+          reflexes: getRandomValue(playerAbilityValues[division].goalkeeper.reflexes),
+        }
+
+        player = Goalkeeper.create({
+          position: props.position,
+          name: props.name,
+          teamId,
+          isStar,
+          ...values,
+        })
+      }
+    } else {
+      if (isStar) {
+
+        // JOGADOR DE LINHA CRAQUE
+        const values = {
+          strength: getRandomValue(starPlayerAbilityValues[division].natural.strength),
+          agility: getRandomValue(starPlayerAbilityValues[division].natural.agility),
+          energy: getRandomValue(starPlayerAbilityValues[division].natural.energy),
+          kick: getRandomValue(starPlayerAbilityValues[division].outfield.kick),
+          longKick: getRandomValue(starPlayerAbilityValues[division].outfield.longKick),
+          pass: getRandomValue(starPlayerAbilityValues[division].outfield.pass),
+          longPass: getRandomValue(starPlayerAbilityValues[division].outfield.longPass),
+          dribble: getRandomValue(starPlayerAbilityValues[division].outfield.dribble),
+        }
+
+        player = Outfield.create({
+          position: props.position,
+          name: props.name,
+          teamId,
+          isStar,
+          ...values,
+        })
+      } else {
+        // JOGADOR DE LINHA NÃO CRAQUE
+        const values = {
+          strength: getRandomValue(playerAbilityValues[division].natural.strength),
+          agility: getRandomValue(playerAbilityValues[division].natural.agility),
+          energy: getRandomValue(playerAbilityValues[division].natural.energy),
+          kick: getRandomValue(playerAbilityValues[division].outfield.kick),
+          longKick: getRandomValue(playerAbilityValues[division].outfield.longKick),
+          pass: getRandomValue(playerAbilityValues[division].outfield.pass),
+          longPass: getRandomValue(playerAbilityValues[division].outfield.longPass),
+          dribble: getRandomValue(playerAbilityValues[division].outfield.dribble),
+        }
+
+        player = Outfield.create({
+          name: props.name,
+          teamId,
+          isStar,
+          position: props.position,
+          ...values,
+        })
+      }
+
+    }
     await this.repository.create(player)
 
     return success({ player })

@@ -21,26 +21,17 @@ describe('Create Player Use Case', () => {
     sut = new CreatePlayerUseCase(playersRepository, teamsRepository)
   })
 
-  it('should return a success response (Outfield)', async () => {
+  it('should return a success response (Outfield and division A)', async () => {
     const league = makeLeague()
     await leaguesRepository.create(league)
 
-    const team = makeTeam({ leagueId: league.id })
+    const team = makeTeam({ leagueId: league.id, division: 'A' })
     await teamsRepository.create(team)
     
     const response = await sut.execute({
       name: 'Player 1',
-      strength: 10,
-      agility: 10,
-      energy: 10,
       teamId: team.id.toString(),
-      kick: 10,
-      longKick: 10,
-      pass: 10,
-      longPass: 10,
-      isStar: true,
       position: 'outfield',
-      dribble: 10,
     })
 
     expect(response.isSuccess()).toBe(true)
@@ -51,43 +42,26 @@ describe('Create Player Use Case', () => {
       expect(player).toBeInstanceOf(Outfield)
       if (player instanceof Outfield) {
         expect(player.name).toBe('Player 1')
-        expect(player.strength).toBe(10)
-        expect(player.agility).toBe(10)
-        expect(player.energy).toBe(10)
+        expect(player.strength).greaterThanOrEqual(10).lessThanOrEqual(20)
         expect(player.teamId.toValue()).toBe(team.id.toValue())
-        expect(player.kick).toBe(10)
-        expect(player.longKick).toBe(10)
-        expect(player.pass).toBe(10)
-        expect(player.longPass).toBe(10)
         expect(player.isStar).toBe(true)
         expect(player.position).toBe('outfield')
-        expect(player.dribble).toBe(10)
         expect(player.id).toBeInstanceOf(UniqueEntityId)
       }
     }
   })
 
-  it('should return a success response (Outfield)', async () => {
+  it('should return a success response (Goalkeeper and division B)', async () => {
     const league = makeLeague()
-    const team = makeTeam({ leagueId: league.id })
+    const team = makeTeam({ leagueId: league.id, division: 'B' })
     await leaguesRepository.create(league)
     await teamsRepository.create(team)
 
        
     const response = await sut.execute({
       name: 'Player 2',
-      strength: 10,
-      agility: 10,
-      energy: 10,
       teamId: team.id.toString(),
-      kick: 10,
-      longKick: 10,
-      pass: 10,
-      longPass: 10,
-      isStar: true,
       position: 'goalkeeper',
-      jump: 10,
-      reflexes: 10,
     })
 
     expect(response.isSuccess()).toBe(true)
@@ -98,18 +72,10 @@ describe('Create Player Use Case', () => {
       expect(player).toBeInstanceOf(Goalkeeper)
       if (player instanceof Goalkeeper) {
         expect(player.name).toBe('Player 2')
-        expect(player.strength).toBe(10)
-        expect(player.agility).toBe(10)
-        expect(player.energy).toBe(10)
+        expect(player.strength).greaterThanOrEqual(5).lessThanOrEqual(15)
         expect(player.teamId.toValue()).toBe(team.id.toValue())
-        expect(player.kick).toBe(10)
-        expect(player.longKick).toBe(10)
-        expect(player.pass).toBe(10)
-        expect(player.longPass).toBe(10)
         expect(player.isStar).toBe(true)
         expect(player.position).toBe('goalkeeper')
-        expect(player.jump).toBe(10)
-        expect(player.reflexes).toBe(10)
         expect(player.id).toBeInstanceOf(UniqueEntityId)
       }
     }
