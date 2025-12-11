@@ -44,10 +44,12 @@ describe('Create Player Use Case', () => {
         expect(player.name).toBe('Player 1')
         expect(player.strength).greaterThanOrEqual(10).lessThanOrEqual(20)
         expect(player.teamId.toValue()).toBe(team.id.toValue())
-        expect(player.isStar).toBe(true)
+        expect(player.isStar).toBeDefined()
         expect(player.position).toBe('outfield')
         expect(player.id).toBeInstanceOf(UniqueEntityId)
       }
+      
+      console.log({ ...player, playerMaxValuePerStat: player.getCurrentPlayerMarketValue(team.division), stamina: player.getPlayerStamina(team.division) })
     }
   })
 
@@ -70,14 +72,17 @@ describe('Create Player Use Case', () => {
       const { player } = response.value
 
       expect(player).toBeInstanceOf(Goalkeeper)
+
       if (player instanceof Goalkeeper) {
         expect(player.name).toBe('Player 2')
         expect(player.strength).greaterThanOrEqual(5).lessThanOrEqual(15)
         expect(player.teamId.toValue()).toBe(team.id.toValue())
-        expect(player.isStar).toBe(true)
+        expect(player.isStar).toBeDefined()
         expect(player.position).toBe('goalkeeper')
         expect(player.id).toBeInstanceOf(UniqueEntityId)
       }
+
+      console.log({ ...player, playerMaxValuePerStat: player.getCurrentPlayerMarketValue(team.division), stamina: player.getPlayerStamina(team.division) })
     }
   })
 

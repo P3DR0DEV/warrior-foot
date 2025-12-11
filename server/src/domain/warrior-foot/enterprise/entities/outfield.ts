@@ -3,6 +3,8 @@ import type { UniqueEntityId } from "#core/entities/unique-entity-id.ts"
 import type { Optional } from "#core/types/optional.ts"
 import type { PlayerProps } from "./player.ts"
 
+type Division = 'A' | 'B' | 'C' | 'D'
+
 export interface OutfieldProps extends PlayerProps {
   teamId: UniqueEntityId
   position: 'outfield'
@@ -24,6 +26,56 @@ export class Outfield extends Entity<OutfieldProps> {
     )
     return player
   }
+
+  getCurrentPlayerMarketValue(division: Division) {
+    const mapEqualizer = {
+      A: 1,
+      B: 10,
+      C: 100,
+      D: 1000,
+    }
+
+    const equalizer = mapEqualizer[division]
+
+    const PRICEPERSTAT =  96153846.15  //  R$  96153846,15 
+
+    const playerStats = {
+      strength: this.strength,
+      agility: this.agility,
+      energy: this.energy,
+      kick: this.kick,
+      longKick: this.longKick,
+      pass: this.pass,
+      longPass: this.longPass,
+      dribble: this.dribble,
+    }
+
+    const totalStats = Object.values(playerStats).reduce((sum, value) => sum + value, 0);
+
+    let playerMaxValuePerStat = 0
+    if (this.isStar) {
+      playerMaxValuePerStat = PRICEPERSTAT / equalizer
+    } else {
+      playerMaxValuePerStat = PRICEPERSTAT * 0.8 / equalizer
+    }
+
+
+    return playerMaxValuePerStat * totalStats
+  }
+
+  getPlayerStamina(division: Division) {
+    const map = {
+      A: 1,
+      B: 2,
+      C: 3,
+      D: 4,
+    }
+
+    const stamina = this.energy * (4/map[division])
+
+    return stamina
+  }
+
 
   get name() {
     return this.props.name
