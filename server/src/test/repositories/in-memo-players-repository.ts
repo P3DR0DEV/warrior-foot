@@ -19,6 +19,10 @@ export class InMemoryPlayersRepository implements PlayersRepository {
     return players
   }
 
+  async createMany(players: Player[]): Promise<void> {
+    this.items.push(...players)
+  }
+
   async create(player: Player): Promise<void> {
     this.items.push(player)
   }

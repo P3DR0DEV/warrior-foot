@@ -8,4 +8,5 @@ export interface PlayersRepository {
   findByTeamId(teamId: string): Promise<Player[]>
 
   create(player: Player): Promise<void>
+  createMany(players: Player[]): Promise<void>
 }

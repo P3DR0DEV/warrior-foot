@@ -23,6 +23,12 @@ export class DrizzlePlayersRepository implements PlayersRepository {
     return DrizzlePlayersMapper.toDomain(player)
   }
 
+  async createMany(values: Player[]): Promise<void> {
+      const data = values.map(DrizzlePlayersMapper.toPersistence)
+
+      await this.drizzle.insert(players).values(data)
+  }
+
   async findByTeamId(teamId: string): Promise<Player[]> {
     const response = await this.drizzle.select().from(players).where(eq(players.teamId, teamId))
 
