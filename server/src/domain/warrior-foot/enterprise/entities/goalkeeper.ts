@@ -51,8 +51,6 @@ export class Goalkeeper extends Entity<GoalkeeperProps> {
 
     const totalStats = Object.values(playerStats).reduce((sum, value) => sum + value, 0)
 
-    console.log(totalStats)
-
     let playerMaxValuePerStat = 0
     if (this.isStar) {
       playerMaxValuePerStat = PRICEPERSTAT / equalizer
