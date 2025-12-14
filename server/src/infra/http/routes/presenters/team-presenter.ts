@@ -36,6 +36,8 @@ export class TeamPresenter {
           dribble: player.position === 'goalkeeper' ? null : player.dribble,
           jump: player.position === 'goalkeeper' ? player.jump : null,
           reflexes: player.position === 'goalkeeper' ? player.reflexes : null,
+          value: player.getCurrentPlayerMarketValue(team.division),
+          stamina: player.getPlayerStamina(team.division),
         }
       })
     }
