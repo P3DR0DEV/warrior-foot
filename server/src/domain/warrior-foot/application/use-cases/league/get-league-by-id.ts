@@ -97,9 +97,7 @@ export class GetLeagueByIdUseCase {
 
         const { team } = result.value
 
-        const players = await this.generatePlayersPerTeam(team.id.toValue(), team.division)
-
-        await this.playersRepository.createMany(players)
+        await this.generatePlayersPerTeam(team.id.toValue(), team.division)
 
         teams.push(team)
         nameIndex++
@@ -155,6 +153,8 @@ export class GetLeagueByIdUseCase {
 
       players.push(player)
     }
+
+    await this.playersRepository.createMany(players)
 
     return players
   }
