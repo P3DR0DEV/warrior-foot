@@ -1,7 +1,6 @@
-import { ResourceNotFound } from '#core/errors/resource-not-found.ts'
+import { ResourceNotFound, type ResourceNotFoundError } from '#core/errors/resource-not-found.ts'
 import { type Either, failure, success } from '#core/types/either.ts'
 import type { Team } from '#domain/warrior-foot/enterprise/entities/team.ts'
-import type { ResourceNotFoundError } from '#infra/http/util/errors.ts'
 import { generateRandomName } from '../../../../../util/generate-random-player-name.ts'
 import { getRandomValue } from '../../../../../util/player-ability-values.ts'
 import type { Player, PlayersRepository } from '../../repositories/players-repository.ts'
