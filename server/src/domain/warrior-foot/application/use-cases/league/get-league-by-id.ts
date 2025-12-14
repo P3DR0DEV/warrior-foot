@@ -110,6 +110,12 @@ export class GetLeagueByIdUseCase {
   }
 
   private async generatePlayersPerTeam(teamId: string, division: Division): Promise<Player[]> {
+    const existingPlayers = await this.playersRepository.findByTeamId(teamId)
+
+    if (existingPlayers.length > 0) {
+      return existingPlayers
+    }
+    
     const players: Player[] = []
 
     const divisionMapper = {
