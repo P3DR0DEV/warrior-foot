@@ -15,6 +15,49 @@ export const getTeamByIdRoute: FastifyPluginAsyncZod = async (app) => {
         params: z.object({
           id: z.uuid(),
         }),
+        response: {
+          200: z.object({
+            team: z.object({
+              id: z.string(),
+              name: z.string(),
+              division: z.enum(['A', 'B', 'C', 'D']),
+              leagueId: z.string(),
+              primaryColor: z.string(),
+              secondaryColor: z.string(),
+              players: z.array(z.object({
+                id: z.string(),
+                name: z.string(),
+                position: z.enum(['goalkeeper', 'outfield']),
+                isStar: z.boolean(),
+                strength: z.number(),
+                agility: z.number(),
+                energy: z.number(),
+                kick: z.number(),
+                longKick: z.number(),
+                pass: z.number(),
+                longPass: z.number(),
+                dribble: z.number().nullable(),
+                jump: z.number().nullable(),
+                reflexes: z.number().nullable(),
+                value: z.number(),
+                stamina: z.number(),
+              })),
+            }),
+          }),
+          400: z
+            .object({
+              name: z.string(),
+              message: z.string(),
+              errors: z.array(z.string()),
+            })
+            .describe('Zod Validation error'),
+          404: z
+            .object({
+              name: z.string(),
+              message: z.string(),
+            })
+            .describe('Resource not found error'),
+        }
       },
     },
     async (request, reply) => {
