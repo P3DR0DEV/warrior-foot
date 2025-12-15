@@ -18,10 +18,16 @@ interface CreateTeamRequest {
 type CreateTeamResponse = Either<ResourceNotFoundError, { team: Team }>
 
 export class CreateTeamUseCase {
+  private readonly repository: TeamsRepository
+  private readonly leaguesRepository: LeaguesRepository
+
   constructor(
-    private readonly repository: TeamsRepository,
-    private readonly leaguesRepository: LeaguesRepository,
-  ) {}
+    repository: TeamsRepository,
+    leaguesRepository: LeaguesRepository,
+  ) {
+    this.repository = repository
+    this.leaguesRepository = leaguesRepository
+  }
 
   async execute({
     name,

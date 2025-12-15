@@ -18,10 +18,13 @@ interface CreatePlayerRequest {
 type CreatePlayerResponse = Either<ResourceNotFoundError, { player: Player }>
 
 export class CreatePlayerUseCase {
-  constructor(
-    private readonly repository: PlayersRepository,
-    private readonly teamsRepository: TeamsRepository,
-  ) { }
+  private readonly repository: PlayersRepository
+  private readonly teamsRepository: TeamsRepository
+
+  constructor(repository: PlayersRepository, teamsRepository: TeamsRepository) {
+    this.repository = repository
+    this.teamsRepository = teamsRepository
+  }
 
   async execute(props: CreatePlayerRequest): Promise<CreatePlayerResponse> {
     const team = await this.teamsRepository.findById(props.teamId)
