@@ -65,7 +65,6 @@ export class GetLeagueByIdUseCase {
     }
 
     const teams = await this.generateInitialTeams(leagueId)
-    await this.teamsRepository.createMany(teams)
 
     return teams
   }
@@ -140,7 +139,7 @@ export class GetLeagueByIdUseCase {
     for (let i = 0; i < numberOfPlayers; i++) {
       
       const result = await createPlayersUseCase.execute({
-        name: generateRandomName(), // GENERATE A RANDOM NAME
+        name: generateRandomName(),
         teamId,
         position: 'outfield',
       })
@@ -154,7 +153,6 @@ export class GetLeagueByIdUseCase {
       players.push(player)
     }
 
-    await this.playersRepository.createMany(players)
 
     return players
   }
