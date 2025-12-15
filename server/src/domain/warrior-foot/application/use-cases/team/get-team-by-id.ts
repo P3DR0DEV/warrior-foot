@@ -72,14 +72,24 @@ export class GetTeamByIdUseCase {
       4: [11, 12]
     }
 
+    const maxGoalkeepersPerDivisionMapper: { [k: number]: [number, number] } = {
+      1: [1, 2],
+      2: [1, 2],
+      3: [1, 1],
+      4: [1, 1]
+    }
+    
     const currentTeamDivision = divisionMapper[division]
     const maxPlayersPerDivision = maxPlayersPerDivisionMapper[currentTeamDivision]
+    const maxGoalkeepersPerDivision = maxGoalkeepersPerDivisionMapper[currentTeamDivision]
 
     const numberOfPlayers = getRandomValue(maxPlayersPerDivision)
+    const numberOfGoalkeepers = getRandomValue(maxGoalkeepersPerDivision)
+    const numberOfOutfielders = numberOfPlayers - numberOfGoalkeepers
 
     const createPlayersUseCase = new CreatePlayerUseCase(this.playersRepository, this.teamsRepository)
 
-    for (let i = 0; i < numberOfPlayers; i++) {
+    for (let i = 0; i < numberOfOutfielders; i++) {
       
       const result = await createPlayersUseCase.execute({
         name: generateRandomName(), 
@@ -96,6 +106,22 @@ export class GetTeamByIdUseCase {
       players.push(player)
     }
 
+    for (let i = 0; i < numberOfGoalkeepers; i++) {
+      const result = await createPlayersUseCase.execute({
+        name: generateRandomName(),
+        teamId,
+        position: 'goalkeeper',
+      })
+
+      if (result.isFailure()) {
+        throw new Error('Error creating player')
+      }
+
+      const { player } = result.value
+
+      players.push(player)
+    }
+    
     return players
   }
 }
