@@ -43,6 +43,6 @@ describe('Test Get Team By Id (E2E)', () => {
       players: expect.any(Array),
     })
 
-    expect(teamFromResponse.players).greaterThanOrEqual(11).lessThanOrEqual(22)
+    expect(teamFromResponse.players.length).greaterThanOrEqual(11).lessThanOrEqual(22)
   })
 })
