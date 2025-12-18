@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { getLeagueById } from "@/http/leagues/get-league-by-id";
 import TeamCard from "./_components/team-card";
 
 interface Team {
+  id: string;
   name: string;
   division: string;
   primaryColor: string;
@@ -40,7 +42,9 @@ export default async function League({ params }: { params: Promise<{ id: string 
             <AccordionTrigger>Primeira Divisão</AccordionTrigger>
             <AccordionContent className="flex flex-wrap gap-4">
               {divisions.A.map((team) => (
-                <TeamCard key={team.name} team={team} />
+                <Link href={`/leagues/${league.id}/team/${team.id}`} key={team.name}>
+                  <TeamCard key={team.name} team={team} />
+                </Link>
               ))}
             </AccordionContent>
           </AccordionItem>
@@ -49,7 +53,9 @@ export default async function League({ params }: { params: Promise<{ id: string 
             <AccordionTrigger>Segunda Divisão</AccordionTrigger>
             <AccordionContent className="flex flex-wrap gap-4">
               {divisions.B.map((team) => (
-                <TeamCard key={team.name} team={team} />
+                <Link href={`/leagues/${league.id}/team/${team.id}`} key={team.name}>
+                  <TeamCard key={team.name} team={team} />
+                </Link>
               ))}
             </AccordionContent>
           </AccordionItem>
@@ -58,7 +64,9 @@ export default async function League({ params }: { params: Promise<{ id: string 
             <AccordionTrigger>Terceira Divisão</AccordionTrigger>
             <AccordionContent className="flex flex-wrap gap-4">
               {divisions.C.map((team) => (
-                <TeamCard key={team.name} team={team} />
+                <Link href={`/leagues/${league.id}/team/${team.id}`} key={team.name}>
+                  <TeamCard key={team.name} team={team} />
+                </Link>
               ))}
             </AccordionContent>
           </AccordionItem>
@@ -67,7 +75,9 @@ export default async function League({ params }: { params: Promise<{ id: string 
             <AccordionTrigger>Quarta Divisão</AccordionTrigger>
             <AccordionContent className="flex flex-wrap gap-4">
               {divisions.D.map((team) => (
-                <TeamCard key={team.name} team={team} />
+                <Link href={`/leagues/${league.id}/team/${team.id}`} key={team.name}>
+                  <TeamCard key={team.name} team={team} />
+                </Link>
               ))}
             </AccordionContent>
           </AccordionItem>

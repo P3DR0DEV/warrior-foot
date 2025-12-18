@@ -1,9 +1,15 @@
-import { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
+import type { UniqueEntityId } from '#core/entities/unique-entity-id.ts'
 import { ResourceNotFound, type ResourceNotFoundError } from '#core/errors/resource-not-found.ts'
 import { type Either, failure, success } from '#core/types/either.ts'
-import { Team } from '#domain/warrior-foot/enterprise/entities/team.ts'
+import type { Team } from '#domain/warrior-foot/enterprise/entities/team.ts'
+import { generateRandomName } from '../../../../../util/generate-random-player-name.ts'
+import { generateRandomTeamName } from '../../../../../util/generate-random-team-name.ts'
+import { getRandomValue } from '../../../../../util/player-ability-values.ts'
 import type { LeaguesRepository } from '../../repositories/leagues-repository.ts'
+import type { Player, PlayersRepository } from '../../repositories/players-repository.ts'
 import type { TeamsRepository } from '../../repositories/teams-repository.ts'
+import { CreatePlayerUseCase } from '../player/create.ts'
+import { CreateTeamUseCase } from '../team/create.ts'
 
 export type LeagueWithTeams = {
   id: UniqueEntityId
@@ -13,19 +19,27 @@ export type LeagueWithTeams = {
   teams: Team[]
 }
 
+type Division = 'A' | 'B' | 'C' | 'D'
+
 type GetLeagueByIdUseCaseResponse = Either<ResourceNotFoundError, { league: LeagueWithTeams }>
 
 export class GetLeagueByIdUseCase {
-  private readonly repository: LeaguesRepository
+  private readonly leaguesRepository: LeaguesRepository
   private readonly teamsRepository: TeamsRepository
+  private readonly playersRepository: PlayersRepository
 
-  constructor(repository: LeaguesRepository, teamsRepository: TeamsRepository) {
-    this.repository = repository
+  constructor(
+    leaguesRepository: LeaguesRepository,
+    teamsRepository: TeamsRepository,
+    playersRepository: PlayersRepository,
+  ) {
+    this.leaguesRepository = leaguesRepository
     this.teamsRepository = teamsRepository
+    this.playersRepository = playersRepository
   }
 
   async execute({ leagueId }: { leagueId: string }): Promise<GetLeagueByIdUseCaseResponse> {
-    const league = await this.repository.findById(leagueId)
+    const league = await this.leaguesRepository.findById(leagueId)
 
     if (!league) {
       return failure(ResourceNotFound('The league referenced by the user was not found'))
@@ -50,72 +64,121 @@ export class GetLeagueByIdUseCase {
       return existingTeams
     }
 
-    const teams = this.generateInitialTeams(leagueId)
-    await this.teamsRepository.createMany(teams)
+    const teams = await this.generateInitialTeams(leagueId)
 
     return teams
   }
 
-  private generateInitialTeams(leagueId: string): Team[] {
+  private async generateInitialTeams(leagueId: string): Promise<Team[]> {
     const divisions = ['A', 'B', 'C', 'D'] as const
     const teamsPerDivision = 8
-    const teamNames = [
-      'Águias',
-      'Leões',
-      'Tigres',
-      'Dragões',
-      'Falcões',
-      'Lobos',
-      'Panthers',
-      'Sharks',
-      'Bulls',
-      'Bears',
-      'Eagles',
-      'Lions',
-      'Tigers',
-      'Warriors',
-      'Knights',
-      'Spartans',
-      'Phoenix',
-      'Thunder',
-      'Lightning',
-      'Storm',
-      'Flames',
-      'Blaze',
-      'Fire',
-      'Ice',
-      'Rangers',
-      'Hunters',
-      'Gladiators',
-      'Champions',
-      'Legends',
-      'Heroes',
-      'Titans',
-      'Giants',
-    ]
 
-    const suffixes = ['FC', 'SC', 'EC', 'AC', 'United', 'City', 'Town', 'Club']
     const teams: Team[] = []
     let nameIndex = 0
+    const createTeamUseCase = new CreateTeamUseCase(this.teamsRepository, this.leaguesRepository)
 
-    divisions.forEach((division) => {
+    for(let i = 0; i < divisions.length; i++) {
+      const division = divisions[i]
       for (let i = 0; i < teamsPerDivision; i++) {
-        const baseName = teamNames[nameIndex % teamNames.length]
-        const suffix = suffixes[Math.floor(Math.random() * suffixes.length)]
+        const teamName = generateRandomTeamName(nameIndex)
 
-        const team = Team.create({
-          name: `${baseName} ${suffix}`,
+        const result = await createTeamUseCase.execute({
+          name: teamName,
           division,
-          leagueId: new UniqueEntityId(leagueId),
+          leagueId,
           primaryColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
           secondaryColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
         })
 
+        if (result.isFailure()) {
+          throw new Error('Error creating team')
+        }
+
+        const { team } = result.value
+
+        await this.generatePlayersPerTeam(team.id.toValue(), team.division)
+
         teams.push(team)
         nameIndex++
       }
-    })
+    }
 
     return teams
+  }
+
+  private async generatePlayersPerTeam(teamId: string, division: Division): Promise<Player[]> {
+    const existingPlayers = await this.playersRepository.findByTeamId(teamId)
+
+    if (existingPlayers.length > 0) {
+      return existingPlayers
+    }
+    
+    const players: Player[] = []
+
+    const divisionMapper = {
+      A: 1,
+      B: 2,
+      C: 3,
+      D: 4,
+    } as const
+
+    const maxPlayersPerDivisionMapper: { [k: number]: [number, number] } = {
+      1: [18, 22],
+      2: [16, 18],
+      3: [12, 16],
+      4: [11, 12]
+    }
+
+    const maxGoalkeepersPerDivisionMapper: { [k: number]: [number, number] } = {
+      1: [1, 2],
+      2: [1, 2],
+      3: [1, 1],
+      4: [1, 1]
+    }
+
+    const currentTeamDivision = divisionMapper[division]
+    const maxPlayersPerDivision = maxPlayersPerDivisionMapper[currentTeamDivision]
+    const maxGoalkeepersPerDivision = maxGoalkeepersPerDivisionMapper[currentTeamDivision]
+
+    const numberOfPlayers = getRandomValue(maxPlayersPerDivision)
+    const numberOfGoalkeepers = getRandomValue(maxGoalkeepersPerDivision)
+    const numberOfOutfielders = numberOfPlayers - numberOfGoalkeepers
+
+    const createPlayersUseCase = new CreatePlayerUseCase(this.playersRepository, this.teamsRepository)
+
+    for (let i = 0; i < numberOfOutfielders; i++) {
+      
+      const result = await createPlayersUseCase.execute({
+        name: generateRandomName(),
+        teamId,
+        position: 'outfield',
+      })
+
+      if (result.isFailure()) {
+        throw new Error('Error creating player')
+      }
+
+      const { player } = result.value
+
+      players.push(player)
+    }
+
+    for (let i = 0; i < numberOfGoalkeepers; i++) {
+      const result = await createPlayersUseCase.execute({
+        name: generateRandomName(),
+        teamId,
+        position: 'goalkeeper',
+      })
+
+      if (result.isFailure()) {
+        throw new Error('Error creating player')
+      }
+
+      const { player } = result.value
+
+      players.push(player)
+    }
+    
+    return players
   }
 }

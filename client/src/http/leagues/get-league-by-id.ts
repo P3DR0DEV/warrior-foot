@@ -4,6 +4,7 @@ import { HTTPError } from "ky";
 import { warriorfootApi } from "../api-client";
 
 interface Team {
+  id: string;
   name: string;
   division: string;
   primaryColor: string;

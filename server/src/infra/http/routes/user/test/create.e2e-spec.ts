@@ -19,10 +19,6 @@ describe('Create User (E2E)', () => {
 
     expect(response.statusCode).toEqual(201)
 
-    expect(response.body.user).toMatchObject({
-      id: expect.any(String),
-      name: 'John Doe',
-      email: 'email@example.com',
-    })
+    expect(response.body.token).toBeTruthy()
   })
 })

@@ -1,0 +1,490 @@
+{
+  "id": "e59dd3a1-a6c5-41cb-8bff-bbd99bd1918c",
+  "prevId": "e973c0da-bef5-4539-a172-5c667b596bf2",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.league_users": {
+      "name": "league_users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "league_id": {
+          "name": "league_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "league_users_league_id_leagues_id_fk": {
+          "name": "league_users_league_id_leagues_id_fk",
+          "tableFrom": "league_users",
+          "tableTo": "leagues",
+          "columnsFrom": [
+            "league_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "league_users_user_id_users_id_fk": {
+          "name": "league_users_user_id_users_id_fk",
+          "tableFrom": "league_users",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.leagues": {
+      "name": "leagues",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "leagues_code_index": {
+          "name": "leagues_code_index",
+          "columns": [
+            {
+              "expression": "code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "leagues_user_id_users_id_fk": {
+          "name": "leagues_user_id_users_id_fk",
+          "tableFrom": "leagues",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "leagues_code_unique": {
+          "name": "leagues_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.players": {
+      "name": "players",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_id": {
+          "name": "team_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "position",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_star": {
+          "name": "is_star",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "strength": {
+          "name": "strength",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "agility": {
+          "name": "agility",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "energy": {
+          "name": "energy",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kick": {
+          "name": "kick",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "long_kick": {
+          "name": "long_kick",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pass": {
+          "name": "pass",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "long_pass": {
+          "name": "long_pass",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dribble": {
+          "name": "dribble",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jump": {
+          "name": "jump",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reflexes": {
+          "name": "reflexes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "players_team_id_teams_id_fk": {
+          "name": "players_team_id_teams_id_fk",
+          "tableFrom": "players",
+          "tableTo": "teams",
+          "columnsFrom": [
+            "team_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teams": {
+      "name": "teams",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "primary_color": {
+          "name": "primary_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secondary_color": {
+          "name": "secondary_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "division": {
+          "name": "division",
+          "type": "division",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'D'"
+        },
+        "league_id": {
+          "name": "league_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "teams_league_id_leagues_id_fk": {
+          "name": "teams_league_id_leagues_id_fk",
+          "tableFrom": "teams",
+          "tableTo": "leagues",
+          "columnsFrom": [
+            "league_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invited_by": {
+          "name": "invited_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.role": {
+      "name": "role",
+      "schema": "public",
+      "values": [
+        "owner",
+        "guest"
+      ]
+    },
+    "public.position": {
+      "name": "position",
+      "schema": "public",
+      "values": [
+        "goalkeeper",
+        "outfield"
+      ]
+    },
+    "public.division": {
+      "name": "division",
+      "schema": "public",
+      "values": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

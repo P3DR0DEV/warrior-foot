@@ -8,6 +8,7 @@ import { env } from '#infra/env/index.ts'
 import { errorHandler } from './error-handler.ts'
 import { signInRoute } from './routes/auth/sign-in.ts'
 import { leagueRoutes } from './routes/league/index.ts'
+import { teamsRoutes } from './routes/teams/index.ts'
 import { userRoutes } from './routes/user/index.ts'
 
 const app = fastify({
@@ -64,6 +65,7 @@ app.get('/health', async (_request, reply) => {
 app.register(userRoutes, { prefix: '/users' })
 app.register(leagueRoutes, { prefix: '/leagues' })
 app.register(signInRoute, { prefix: '/auth' })
+app.register(teamsRoutes, { prefix: '/teams' })
 
 app.setErrorHandler(errorHandler)
 
