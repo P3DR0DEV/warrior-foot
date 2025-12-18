@@ -36,6 +36,12 @@ export class DrizzleLeaguesRepository implements LeaguesRepository {
     await this.drizzle.insert(leagues).values(data)
   }
 
+  async update(league: League): Promise<void> {
+    const data = DrizzleLeaguesMapper.toPersistence(league)
+
+    await this.drizzle.update(leagues).set(data).where(eq(leagues.id, league.id.toValue()))
+  }
+
   async findByCode(code: string): Promise<League | null> {
     const response = await this.drizzle.select().from(leagues).where(eq(leagues.code, code))
 

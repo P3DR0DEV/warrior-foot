@@ -6,4 +6,5 @@ export interface LeaguesRepository {
   findByCode(code: string): Promise<League | null>
 
   create(league: League): Promise<void>
+  update(league: League): Promise<void>
 }
