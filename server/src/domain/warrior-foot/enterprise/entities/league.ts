@@ -28,6 +28,10 @@ export class League extends Entity<LeagueProps> {
     return this.props.name
   }
 
+  set name(value: string) {
+    this.props.name = value
+  }
+
   get code() {
     return this.props.code.toValue()
   }

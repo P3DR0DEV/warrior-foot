@@ -10,6 +10,16 @@ export class InMemoryLeaguesRepository implements LeaguesRepository {
     return leagues
   }
 
+  async update(league: League): Promise<void> {
+    const item = this.items.find((item) => item.id.toValue() === league.id.toValue())
+
+    if (item) {
+      item.name = league.name
+    }
+
+    return
+  }
+
   async findById(id: string): Promise<League | null> {
     const league = this.items.find((item) => item.id.toValue() === id)
 
