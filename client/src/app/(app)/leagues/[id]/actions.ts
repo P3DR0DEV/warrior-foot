@@ -1,3 +1,6 @@
+'use server'
+
+import { revalidatePath } from "next/cache";
 import z from "zod";
 import { changeLeagueName } from "@/http/leagues/change-league-name";
 
@@ -31,6 +34,7 @@ export async function changeLeagueNameAction(data: FormData) {
     };
   }
 
+  revalidatePath("/leagues/[id]/team/[teamId]", "page");
   return {
     success: true,
     message: null,
