@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import z from "zod";
 import { changeLeagueName } from "@/http/leagues/change-league-name";
+import { initiateSeason } from "@/http/leagues/initiate-season";
 
 const inviteFriendsSchema = z.object({
   name: z.string().min(3, { message: "O nome da liga deve ter pelo menos 3 caracteres" }),
@@ -35,6 +36,25 @@ export async function changeLeagueNameAction(data: FormData) {
   }
 
   revalidatePath("/leagues/[id]/team/[teamId]", "page");
+  return {
+    success: true,
+    message: null,
+    validationErrors: null,
+  };
+}
+
+
+export async function initiateSeasonAction({ id }: { id: string }) {
+  const result = await initiateSeason({ leagueId: id});
+
+  if (!result.success) {
+    return {
+      success: false,
+      message: result.message,
+      validationErrors: null,
+    };
+  }
+  
   return {
     success: true,
     message: null,

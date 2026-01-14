@@ -4,6 +4,7 @@ import { changeLeagueNameRoute } from './change-league-name.ts'
 import { createNewLeagueRoute } from './create.ts'
 import { getLeagueByIdRoute } from './get-league-by-id.ts'
 import { getLeaguesByUserRoute } from './get-leagues-by-user.ts'
+import { initiateSeasonRoute } from './initiate-season.ts'
 import { inviteFriendsRoute } from './invite-friend.ts'
 import { verifyInviteRoute } from './verify-invite.ts'
 
@@ -15,4 +16,5 @@ export async function leagueRoutes(app: FastifyInstance) {
   app.register(verifyInviteRoute)
   app.register(acceptInviteRoute)
   app.register(changeLeagueNameRoute)
+  app.register(initiateSeasonRoute)
 }
