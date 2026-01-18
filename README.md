@@ -67,3 +67,16 @@ npm run dev
 cd ../client
 npm install
 npm run dev
+```
+Observação: é necessário configurar variáveis de ambiente para banco de dados e Redis.
+
+## 📌 Status do Projeto
+🚧 Em desenvolvimento
+O projeto foi estruturado para receber novas funcionalidades, como:
+- geração de jogadores
+- temporadas
+- simulação de partidas
+- rankings e estatísticas
+
+## 📄 Contexto
+  Este projeto foi desenvolvido a partir de um desafio de modelagem de um jogo de manager de futebol, com foco em backend, regras de negócio e escalabilidade, simulando cenários reais de aplicações multiusuário
