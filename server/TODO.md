@@ -1,0 +1,3 @@
+- [ ] Validar se quem está tentando trocar o nome da liga é o dono da liga
+- [ ] Direcionar uma equipe para o dono da liga poder gerenciar (4 divisão)
+  - [ ] Direcionar uma equipe para o usuário que for convidado para a liga (4 divisão)
