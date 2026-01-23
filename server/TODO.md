@@ -2,3 +2,4 @@
 - [ ] Direcionar uma equipe para o dono da liga poder gerenciar (4 divisão)
   - [ ] Direcionar uma equipe para o usuário que for convidado para a liga (4 divisão)
 - [ ] Atualizar [initiate-season](src/domain/warrior-foot/application/use-cases/league/initiate-season.ts) para criar uma [Schedule](src/domain/warrior-foot/enterprise/entities/schedule.ts) para cada divisão da liga
+- [ ] Atualizar todas os testes de rotas fechadas para utilizar o [MakeAuthenticatedUser](src/test/factories/make-authenticated-user.ts)
