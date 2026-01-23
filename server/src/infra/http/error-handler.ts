@@ -5,6 +5,7 @@ import {
   InvalidCredentialsError,
   ResourceNotFoundError,
   UnauthorizedError,
+  UnauthorizedResourceAccessError,
 } from './util/errors.ts'
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
@@ -30,6 +31,14 @@ export const errorHandler: FastifyErrorHandler = (error, _request, reply) => {
 
   if (error instanceof ResourceNotFoundError) {
     return reply.status(404).send({
+      name: error.name,
+      cause: error.cause,
+      message: error.message,
+    })
+  }
+
+  if (error instanceof UnauthorizedResourceAccessError) {
+    return reply.status(401).send({
       name: error.name,
       cause: error.cause,
       message: error.message,
