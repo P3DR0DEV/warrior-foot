@@ -1,6 +1,7 @@
 import supertest from 'supertest'
 import { app } from '#infra/http/app-test.ts'
 import { db } from '#infra/lib/drizzle.ts'
+import { makeAuthenticatedUser } from '#test/factories/make-authenticated-user.ts'
 import { LeagueFactory } from '#test/factories/make-league.ts'
 import { UserFactory } from '#test/factories/make-user.ts'
 
@@ -21,13 +22,15 @@ describe('Test Get Team By Id (E2E)', () => {
     const leagueFactory = new LeagueFactory(db)
     const league = await leagueFactory.createLeague({ userId: user.id })
 
-    const getLeagueByIdResponse = await supertest(app.server).get(`/leagues/${league.id}`)
+    const { token } = await makeAuthenticatedUser({ user })
+
+    const getLeagueByIdResponse = await supertest(app.server).get(`/leagues/${league.id}`).set('Authorization', `Bearer ${token}`)
 
     expect(getLeagueByIdResponse.statusCode).toEqual(200)
 
     const { league: leagueFromResponse } = getLeagueByIdResponse.body
 
-    const response = await supertest(app.server).get(`/teams/${leagueFromResponse.teams[0].id}`)
+    const response = await supertest(app.server).get(`/teams/${leagueFromResponse.teams[0].id}`).set('Authorization', `Bearer ${token}`)
 
     expect(response.statusCode).toEqual(200)
 

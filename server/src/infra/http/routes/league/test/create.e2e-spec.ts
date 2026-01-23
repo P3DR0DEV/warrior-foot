@@ -1,6 +1,7 @@
 import supertest from 'supertest'
 import { app } from '#infra/http/app-test.ts'
 import { db } from '#infra/lib/drizzle.ts'
+import { makeAuthenticatedUser } from '#test/factories/make-authenticated-user.ts'
 import { UserFactory } from '#test/factories/make-user.ts'
 
 describe('Test League Creation (E2E)', () => {
@@ -17,7 +18,9 @@ describe('Test League Creation (E2E)', () => {
     const userFactory = new UserFactory(db)
     const user = await userFactory.createUser()
 
-    const response = await supertest(app.server).post('/leagues/').send({
+    const { token } = await makeAuthenticatedUser({ user })
+
+    const response = await supertest(app.server).post('/leagues/').set('Authorization', `Bearer ${token}`).send({
       name: 'my second league',
       userId: user.id.toString(),
     })
