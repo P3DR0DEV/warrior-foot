@@ -46,12 +46,12 @@ export const changeLeagueNameRoute: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
-      await request.getCurrentUser()
+      const { id: userId } = await request.getCurrentUser()
 
       const { leagueId } = request.params
       const { name } = request.body
 
-      const response = await changeLeagueNameUseCase.execute({ leagueId, name })
+      const response = await changeLeagueNameUseCase.execute({ leagueId, name, userId })
 
       if (response.isFailure()) {
         const { name, message } = response.reason

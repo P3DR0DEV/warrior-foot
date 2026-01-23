@@ -30,4 +30,19 @@ describe('Test Get Leagues By User (E2E)', () => {
 
     expect(response.body.message).toBe('League name changed successfully')
   })
+
+
+  it('should return a Unauthorized error', async () => {
+    const userFactory = new UserFactory(db)
+    const user = await userFactory.createUser()
+
+    const leagueFactory = new LeagueFactory(db)
+    const league = await leagueFactory.createLeague({ userId: user.id })
+
+    const response = await supertest(app.server).patch(`/leagues/${league.id}/change-name`).send({
+      name: 'New League Name',
+    })
+
+    expect(response.statusCode).toEqual(401)
+  })
 })
