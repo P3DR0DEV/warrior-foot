@@ -1,4 +1,4 @@
-- [ ] Validar se quem está tentando trocar o nome da liga é o dono da liga
+- [ ] Validar se quem está tentando trocar o nome da liga é o dono da liga [route](src/infra/http/routes/league/change-name.ts)
 - [ ] Direcionar uma equipe para o dono da liga poder gerenciar (4 divisão)
   - [ ] Direcionar uma equipe para o usuário que for convidado para a liga (4 divisão)
-- [ ] fix initiate-season to create a new schedule for each division 
+- [ ] Atualizar [initiate-season](src/domain/warrior-foot/application/use-cases/league/initiate-season.ts) para criar uma [Schedule](src/domain/warrior-foot/enterprise/entities/schedule.ts) para cada divisão da liga
